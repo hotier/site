@@ -3,9 +3,9 @@
   let env = process.env;
   if (theme.algolia_search.enable) {
     algolia = JSON.stringify({
-      appId: env.ALGOLIA_APP_ID || config.algolia.appId || config.algolia.applicationID,
-      apiKey: env.ALGOLIA_API_KEY || config.algolia.apiKey,
-      indexName: env.ALGOLIA_INDEX_NAME || config.algolia.indexName,
+      appId: env.ALGOLIA_APP_ID || theme.algolia_search.appId || (config.algolia && (config.algolia.appId || config.algolia.applicationID)),
+      apiKey: env.ALGOLIA_API_KEY || theme.algolia_search.apiKey || (config.algolia && config.algolia.apiKey),
+      indexName: env.ALGOLIA_INDEX_NAME || theme.algolia_search.indexName || (config.algolia && config.algolia.indexName),
       hits: theme.algolia_search.hits,
       // search languages
       languages: {
