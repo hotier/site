@@ -19,9 +19,9 @@
       },
       app: {
         header: {
-          content: '内容',
-          workflow: '工作流',
-          media: '媒体',
+          content: '内容管理',
+          workflow: '编辑流程',
+          media: '媒体库',
           quickAdd: '快速添加',
         },
         app: {
@@ -37,20 +37,24 @@
       },
       collection: {
         sidebar: {
-          collections: '集合',
-          allCollections: '所有集合',
+          collections: '分类',
+          allCollections: '所有分类',
           searchAll: '搜索所有',
           filterBy: '筛选条件',
         },
         collectionTop: {
-          viewAs: '查看方式',
+          viewAs: '查看视图',
           newButton: '新建 %{collectionLabel}',
+          sortBy: '排序方式',
         },
         entries: {
-          loadingEntries: '正在加载条目...',
-          cachingEntries: '正在缓存条目...',
-          longerLoading: '加载时间较长',
-          noEntries: '没有条目',
+          loadingEntries: '正在加载...',
+          cachingEntries: '正在缓存...',
+          longerLoading: '正在努力加载中',
+          noEntries: '暂无内容',
+          sortBy: '排序方式',
+          published: '已发布',
+          writingIn: '正在编辑 %{collectionLabel}',
         },
         defaultFields: {
           author: { label: '作者' },
@@ -60,9 +64,9 @@
       editor: {
         editorControlPane: {
           widget: {
-            required: '%{fieldLabel} 是必填项。',
+            required: '%{fieldLabel} 为必填项。',
             regexPattern: '%{fieldLabel} 不符合模式：%{pattern}。',
-            processing: '%{fieldLabel} 正在处理。',
+            processing: '%{fieldLabel} 正在处理中。',
             range: '%{fieldLabel} 必须在 %{minValue} 到 %{maxValue} 之间。',
             min: '%{fieldLabel} 必须至少为 %{minValue}。',
             max: '%{fieldLabel} 必须不大于 %{maxValue}。',
@@ -75,23 +79,23 @@
         },
         editorWidgets: {
           markdown: {
-            richText: '富文本',
-            markdown: 'Markdown',
+            richText: '可视化编辑',
+            markdown: '源码模式',
           },
           image: {
             choose: '选择图片',
-            chooseUrl: '从 URL 选择',
-            replaceUrl: '替换为 URL',
+            chooseUrl: '图片 URL',
+            replaceUrl: '替换 URL',
             prompts: {
-              url: '输入图片 URL',
+              url: '请输入图片 URL',
             },
           },
           file: {
             choose: '选择文件',
-            chooseUrl: '从 URL 选择',
-            replaceUrl: '替换为 URL',
+            chooseUrl: '文件 URL',
+            replaceUrl: '替换 URL',
             prompts: {
-              url: '输入文件 URL',
+              url: '请输入文件 URL',
             },
           },
           unknownControl: {
@@ -112,23 +116,31 @@
             now: '现在',
           },
         },
+        onSave: {
+          title: '修改已保存',
+          saveStatus: {
+            saved: '已保存',
+            saving: '正在保存...',
+            error: '保存失败',
+          },
+        },
       },
       mediaLibrary: {
         mediaLibraryCard: {
           copyCode: '复制路径',
-          copyUrl: '复制 URL',
+          copyUrl: '复制链接',
           delete: '删除',
           remove: '移除',
         },
         mediaLibrary: {
-          onDelete: '确定要删除选中的媒体文件吗？',
-          fileTooLarge: '文件太大。\n配置限制最大 %{size} KB。',
+          onDelete: '确认要删除选中的媒体文件吗？',
+          fileTooLarge: '文件过大。\n最大限制为 %{size} KB。',
         },
         mediaLibraryModal: {
           loading: '正在加载...',
-          noResults: '没有结果。',
-          noAssetsFound: '未找到资产。',
-          noImagesFound: '未找到图片。',
+          noResults: '暂无结果',
+          noAssetsFound: '未发现资产',
+          noImagesFound: '未发现图片',
           private: '私有',
           images: '图片',
           mediaAssets: '媒体资产',
@@ -145,13 +157,13 @@
           goBack: '返回',
         },
         localBackup: {
-          hasLocalBackup: '此条目有本地备份',
+          hasLocalBackup: '此条目存在本地备份',
         },
       },
       workflow: {
         workflow: {
-          loading: '正在加载编辑工作流条目',
-          workflowHeading: '编辑工作流',
+          loading: '正在加载编辑流程条目',
+          workflowHeading: '编辑流程',
           newPost: '新文章',
           stages: {
             draft: '草稿',
@@ -167,12 +179,12 @@
           inReview: '审核中',
         },
         workflowList: {
-          onDeleteEntry: '确定要删除此条目吗？',
-          onPublishingNotReadyEntry: '只有状态为“准备发布”的条目才能发布。请将卡片拖到“准备发布”栏以启用发布。',
-          onPublishEntry: '确定要发布此条目吗？',
-          draftHeader: '草稿',
+          onDeleteEntry: '确认要删除此条目吗？',
+          onPublishingNotReadyEntry: '只有状态为“准备发布”的条目才能发布。',
+          onPublishEntry: '确认要发布此条目吗？',
+          draftHeader: '草稿箱',
           inReviewHeader: '审核中',
-          readyHeader: '准备发布',
+          readyHeader: '待发布',
           currentEntries: '%{smart_count} 个条目',
         },
       },
