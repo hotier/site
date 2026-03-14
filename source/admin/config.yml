@@ -5,19 +5,58 @@ backend:
   base_url: https://site-navy-beta.vercel.app # 统一使用 Vercel 域名
   auth_endpoint: api/auth # 指向我们新增的 Vercel Serverless Function
 
+publish_mode: editorial_workflow # 启用编辑工作流
+locale: 'zh' # 设置界面语言为中文
+
 media_folder: source/images # 图片存储目录
 public_folder: /images # 发布后的图片路径
 
 collections:
-  - name: "posts" # 集合名称
-    label: "文章" # 后台显示的标签
-    folder: "source/_posts" # 文章所在的目录
-    create: true # 是否允许创建新文章
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # 文件命名规则
-    fields: # 文章字段配置
+  - name: "posts"
+    label: "文章管理"
+    folder: "source/_posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
       - { label: "标题", name: "title", widget: "string" }
       - { label: "发布日期", name: "date", widget: "datetime" }
+      - { label: "封面图", name: "cover", widget: "image", required: false }
+      - { label: "描述", name: "description", widget: "text", required: false }
       - { label: "布局", name: "layout", widget: "hidden", default: "post" }
       - { label: "正文", name: "body", widget: "markdown" }
       - { label: "分类", name: "categories", widget: "list", required: false }
       - { label: "标签", name: "tags", widget: "list", required: false }
+
+  - name: "pages"
+    label: "独立页面"
+    files:
+      - name: "about"
+        label: "关于我"
+        file: "source/about/index.md"
+        fields:
+          - { label: "标题", name: "title", widget: "string" }
+          - { label: "内容", name: "body", widget: "markdown" }
+      - name: "friends"
+        label: "友情链接"
+        file: "source/friends/index.md"
+        fields:
+          - { label: "标题", name: "title", widget: "string" }
+          - { label: "内容", name: "body", widget: "markdown" }
+
+  - name: "config"
+    label: "站点设置"
+    delete: false # 禁止删除配置文件
+    editor:
+      preview: false # 配置文件不需要预览
+    files:
+      - name: "site_config"
+        label: "基础信息"
+        file: "_config.yml"
+        fields:
+          - { label: "站点标题", name: "title", widget: "string" }
+          - { label: "副标题", name: "subtitle", widget: "string" }
+          - { label: "站点描述", name: "description", widget: "text" }
+          - { label: "作者", name: "author", widget: "string" }
+          - { label: "站点语言", name: "language", widget: "string" }
+          - { label: "时区", name: "timezone", widget: "string" }
+          - { label: "站点 URL", name: "url", widget: "string" }

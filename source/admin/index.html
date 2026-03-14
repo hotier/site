@@ -9,5 +9,174 @@
 <body>
   <!-- Include the script that builds the page and powers Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    CMS.registerLocale('zh', {
+      auth: {
+        login: '登录',
+        loggingIn: '正在登录...',
+        loginWithGitHub: '使用 GitHub 登录',
+        refresh: '刷新',
+      },
+      app: {
+        header: {
+          content: '内容',
+          workflow: '工作流',
+          media: '媒体',
+          quickAdd: '快速添加',
+        },
+        app: {
+          errorHeader: '错误',
+          configErrors: '配置错误',
+          checkConfigYml: '请检查您的 config.yml 文件。',
+          loadingConfig: '正在加载配置...',
+          waitingBackend: '正在等待后端...',
+        },
+        notFoundPage: {
+          header: '未找到页面',
+        },
+      },
+      collection: {
+        sidebar: {
+          collections: '集合',
+          allCollections: '所有集合',
+          searchAll: '搜索所有',
+          filterBy: '筛选条件',
+        },
+        collectionTop: {
+          viewAs: '查看方式',
+          newButton: '新建 %{collectionLabel}',
+        },
+        entries: {
+          loadingEntries: '正在加载条目...',
+          cachingEntries: '正在缓存条目...',
+          longerLoading: '加载时间较长',
+          noEntries: '没有条目',
+        },
+        defaultFields: {
+          author: { label: '作者' },
+          updatedAt: { label: '更新时间' },
+        },
+      },
+      editor: {
+        editorControlPane: {
+          widget: {
+            required: '%{fieldLabel} 是必填项。',
+            regexPattern: '%{fieldLabel} 不符合模式：%{pattern}。',
+            processing: '%{fieldLabel} 正在处理。',
+            range: '%{fieldLabel} 必须在 %{minValue} 到 %{maxValue} 之间。',
+            min: '%{fieldLabel} 必须至少为 %{minValue}。',
+            max: '%{fieldLabel} 必须不大于 %{maxValue}。',
+            listCount: '%{fieldLabel} 必须有 %{count} 个项目。',
+            listCountRange: '%{fieldLabel} 必须在 %{minCount} 到 %{maxCount} 个项目之间。',
+            listMinCount: '%{fieldLabel} 必须至少有 %{minCount} 个项目。',
+            listMaxCount: '%{fieldLabel} 必须不大于 %{maxCount} 个项目。',
+            invalidScope: '%{fieldLabel} 作用域无效。',
+          },
+        },
+        editorWidgets: {
+          markdown: {
+            richText: '富文本',
+            markdown: 'Markdown',
+          },
+          image: {
+            choose: '选择图片',
+            chooseUrl: '从 URL 选择',
+            replaceUrl: '替换为 URL',
+            prompts: {
+              url: '输入图片 URL',
+            },
+          },
+          file: {
+            choose: '选择文件',
+            chooseUrl: '从 URL 选择',
+            replaceUrl: '替换为 URL',
+            prompts: {
+              url: '输入文件 URL',
+            },
+          },
+          unknownControl: {
+            unknownControl: "未知控件 '%{controlName}'",
+          },
+          unknownPreview: {
+            unknownPreview: "未知预览 '%{previewName}'",
+          },
+          headingOptions: {
+            headingOne: '标题 1',
+            headingTwo: '标题 2',
+            headingThree: '标题 3',
+            headingFour: '标题 4',
+            headingFive: '标题 5',
+            headingSix: '标题 6',
+          },
+          datetime: {
+            now: '现在',
+          },
+        },
+      },
+      mediaLibrary: {
+        mediaLibraryCard: {
+          copyCode: '复制路径',
+          copyUrl: '复制 URL',
+          delete: '删除',
+          remove: '移除',
+        },
+        mediaLibrary: {
+          onDelete: '确定要删除选中的媒体文件吗？',
+          fileTooLarge: '文件太大。\n配置限制最大 %{size} KB。',
+        },
+        mediaLibraryModal: {
+          loading: '正在加载...',
+          noResults: '没有结果。',
+          noAssetsFound: '未找到资产。',
+          noImagesFound: '未找到图片。',
+          private: '私有',
+          images: '图片',
+          mediaAssets: '媒体资产',
+          search: '搜索...',
+          uploading: '正在上传...',
+          uploadNew: '上传新文件',
+          uploadMultiple: '上传多个文件',
+          selecting: '正在选择...',
+          chooseSelected: '选择选中项',
+        },
+      },
+      ui: {
+        default: {
+          goBack: '返回',
+        },
+        localBackup: {
+          hasLocalBackup: '此条目有本地备份',
+        },
+      },
+      workflow: {
+        workflow: {
+          loading: '正在加载编辑工作流条目',
+          workflowHeading: '编辑工作流',
+          newPost: '新文章',
+          stages: {
+            draft: '草稿',
+            in_review: '审核中',
+            ready: '准备发布',
+          },
+        },
+        workflowCard: {
+          lastChange: '%{date} 最后修改',
+          abandoned: '已放弃',
+          draft: '草稿',
+          ready: '准备发布',
+          inReview: '审核中',
+        },
+        workflowList: {
+          onDeleteEntry: '确定要删除此条目吗？',
+          onPublishingNotReadyEntry: '只有状态为“准备发布”的条目才能发布。请将卡片拖到“准备发布”栏以启用发布。',
+          onPublishEntry: '确定要发布此条目吗？',
+          draftHeader: '草稿',
+          inReviewHeader: '审核中',
+          readyHeader: '准备发布',
+          currentEntries: '%{smart_count} 个条目',
+        },
+      },
+    });
+  </script>
 </body>
 </html>
