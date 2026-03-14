@@ -1,0 +1,23 @@
+backend:
+  name: github
+  repo: hotier/site # 您的 GitHub 仓库
+  branch: main # 源代码分支
+  base_url: https://hotier.github.io/site
+  auth_endpoint: /admin/ # 身份验证入口
+
+media_folder: source/images # 图片存储目录
+public_folder: /images # 发布后的图片路径
+
+collections:
+  - name: "posts" # 集合名称
+    label: "文章" # 后台显示的标签
+    folder: "source/_posts" # 文章所在的目录
+    create: true # 是否允许创建新文章
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # 文件命名规则
+    fields: # 文章字段配置
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "发布日期", name: "date", widget: "datetime" }
+      - { label: "布局", name: "layout", widget: "hidden", default: "post" }
+      - { label: "正文", name: "body", widget: "markdown" }
+      - { label: "分类", name: "categories", widget: "list", required: false }
+      - { label: "标签", name: "tags", widget: "list", required: false }
