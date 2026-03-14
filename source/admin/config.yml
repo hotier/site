@@ -2,7 +2,7 @@ backend:
   name: github
   repo: hotier/site # 您的 GitHub 仓库
   branch: main # 源代码分支
-  base_url: https://hotier.cc.cd # 使用您的主域名
+  base_url: https://site-navy-beta.vercel.app # 统一使用 Vercel 域名
   auth_endpoint: api/auth # 指向我们新增的 Vercel Serverless Function
 
 media_folder: source/images # 图片存储目录
