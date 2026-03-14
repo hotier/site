@@ -10,7 +10,7 @@
   <!-- Include the script that builds the page and powers Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
-    CMS.registerLocale('zh', {
+    const zh_hans = {
       auth: {
         login: '登录',
         loggingIn: '正在登录...',
@@ -52,6 +52,7 @@
           cachingEntries: '正在缓存...',
           longerLoading: '正在努力加载中',
           noEntries: '暂无内容',
+          sortBy: '排序方式',
         },
         defaultFields: {
           author: { label: '作者' },
@@ -120,9 +121,9 @@
           save: '保存',
           saving: '正在保存...',
           saved: '已保存',
+          published: '已发布',
           publish: '发布',
           publishing: '正在发布...',
-          published: '已发布',
           publishChanges: '发布修改',
           deleteEntry: '删除已发布的条目',
           deleteUnpublishedEntry: '删除未发布的条目',
@@ -200,7 +201,10 @@
           currentEntries: '%{smart_count} 个条目',
         },
       },
-    });
+    };
+    CMS.registerLocale('zh', zh_hans);
+    CMS.registerLocale('zh-cn', zh_hans);
+    CMS.registerLocale('zh_hans', zh_hans);
   </script>
 </body>
 </html>
