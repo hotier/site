@@ -5,7 +5,7 @@
   buttonLink: /about/
   limit: 30
   home_essay: true
-  top_background: images\default_pic_2.png
+  top_background: /images/default_pic_2.png
   essay_list:
     # - content: 安知鱼主题指南
     #   date: 2023/09/09
