@@ -101,7 +101,21 @@ ignore:
 theme: anzhiyu
 plugins:
   - hexo-algoliasearch
-
+algolia:
+  appId: "LL9WT1LYBJ"
+  apiKey: "cc86d4703f9e6f3b49649530e97815fd"
+  adminApiKey: "bcee0e78acc9ed6d7d55982c55e558cc"
+  chunkSize: 5000
+  indexName: "hexo"
+  fields:
+    - content:strip:truncate,0,500
+    - excerpt:strip
+    - gallery
+    - permalink
+    - photos
+    - slug
+    - tags
+    - title
 # 部署设置
 ## 文档: https://hexo.io/docs/one-command-deployment
 ## 本地不再使用 hexo deploy，已切换至 GitHub Actions 自动化部署
