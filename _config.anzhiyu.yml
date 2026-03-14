@@ -93,6 +93,9 @@ author_status:
 # Algolia search
 algolia_search:
   enable: true
+  appId: "LL9WT1LYBJ"
+  apiKey: "cc86d4703f9e6f3b49649530e97815fd"
+  indexName: "hexo_pages"
   hits:
     per_page: 6
   tags:

@@ -103,11 +103,11 @@ plugins:
   - hexo-algoliasearch
 # key数据,在vercel配置环境变量
 algolia:
-  appId: ""
-  apiKey: ""
-  adminApiKey: ""
+  appId: "LL9WT1LYBJ"
+  apiKey: "cc86d4703f9e6f3b49649530e97815fd"
+  adminApiKey: "144f8b76307819f786b0a658d18b1cbd"
   chunkSize: 5000
-  indexName: ""
+  indexName: "hexo_pages"
   fields:
     - content:strip:truncate,0,500
     - excerpt:strip

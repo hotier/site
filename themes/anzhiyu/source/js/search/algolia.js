@@ -118,7 +118,14 @@ window.addEventListener("load", () => {
     container: "#algolia-hits",
     templates: {
       item(data) {
-        const rawLink = data.permalink ? data.permalink : GLOBAL_CONFIG.root + data.path;
+        let rawLink = data.permalink ? data.permalink : GLOBAL_CONFIG.root + data.path;
+
+        // 修复跳转到 0.0.7.234 的问题：如果链接包含错误 IP，将其转为相对路径
+        if (rawLink.includes("0.0.7.234")) {
+          rawLink = rawLink.replace(/^https?:\/\/0\.0\.7\.234/, "");
+          if (!rawLink.startsWith("/")) rawLink = "/" + rawLink;
+        }
+
         // 验证链接安全性，防止 javascript: 协议注入
         const link = /^(https?:\/\/|\/)/i.test(rawLink) ? escapeHtml(rawLink) : escapeHtml("/" + rawLink);
         const result = data._highlightResult;
