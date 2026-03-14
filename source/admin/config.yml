@@ -2,8 +2,9 @@ backend:
   name: github
   repo: hotier/site # 您的 GitHub 仓库
   branch: main # 源代码分支
-  base_url: https://hotier.github.io/site
-  auth_endpoint: /admin/ # 身份验证入口
+  site_domain: site-hotier.vercel.app # 您的 Vercel 域名（请根据实际修改）
+  base_url: https://site-hotier.vercel.app
+  auth_endpoint: /api/auth # 默认 Vercel OAuth 路径
 
 media_folder: source/images # 图片存储目录
 public_folder: /images # 发布后的图片路径
