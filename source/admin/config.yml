@@ -4,59 +4,345 @@ backend:
   branch: main # 源代码分支
   base_url: https://site-navy-beta.vercel.app # 统一使用 Vercel 域名
   auth_endpoint: api/auth # 指向我们新增的 Vercel Serverless Function
+  commit_messages:
+    create: "✨ 新建文章: {{slug}}"
+    update: "📝 更新文章: {{slug}}"
+    delete: "🗑️ 删除文章: {{slug}}"
+    uploadMedia: "📷 上传图片: {{path}}"
+    deleteMedia: "🗑️ 删除图片: {{path}}"
 
 publish_mode: editorial_workflow # 启用编辑工作流
-locale: 'zh_Hans' # 设置界面语言为官方汉化包的代码
+locale: 'zh_Hans' # 设置界面语言为简体中文
 
+# 站点链接配置
+site_url: https://site-navy-beta.vercel.app
+display_url: https://site-navy-beta.vercel.app
+
+# 自定义 Logo
+logo:
+  src: /favicon.ico
+  show_in_header: true
+
+# 支持中文文件名
+slug:
+  encoding: "unicode"
+  clean_accents: false
+  sanitize_replacement: "-"
+
+# 媒体配置
 media_folder: source/images # 图片存储目录
 public_folder: /images # 发布后的图片路径
 
 collections:
+  # ==================== 文章管理 ====================
   - name: "posts"
     label: "文章管理"
+    label_singular: "文章"
+    icon: "fas fa-file-alt"
     folder: "source/_posts"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{slug}}"
+    description: "管理博客文章"
+    summary: "{{title}} - {{date|date('YYYY-MM-DD')}}"
+    sortable_fields:
+      - date
+      - title
+      - categories
+    view_filters:
+      - label: "置顶文章"
+        field: sticky
+        pattern: true
+      - label: "加密文章"
+        field: password
+        pattern: ".+"
+      - label: "隐藏评论"
+        field: comments
+        pattern: false
+    view_groups:
+      - label: "按年份"
+        field: date
+        pattern: \d{4}
+      - label: "按分类"
+        field: categories
     fields:
-      - { label: "标题", name: "title", widget: "string" }
-      - { label: "发布日期", name: "date", widget: "datetime" }
-      - { label: "封面图", name: "cover", widget: "image", required: false }
-      - { label: "描述", name: "description", widget: "text", required: false }
-      - { label: "布局", name: "layout", widget: "hidden", default: "post" }
-      - { label: "正文", name: "body", widget: "markdown" }
-      - { label: "分类", name: "categories", widget: "list", required: false }
-      - { label: "标签", name: "tags", widget: "list", required: false }
+      # ---------- 基础信息 ----------
+      - label: "标题"
+        name: "title"
+        widget: "string"
+        required: true
+      - label: "发布日期"
+        name: "date"
+        widget: "datetime"
+        default: "{{now}}"
+        format: "YYYY-MM-DD HH:mm:ss"
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm:ss"
+        picker_utc: false
+      - label: "更新日期"
+        name: "updated"
+        widget: "datetime"
+        required: false
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm:ss"
+        picker_utc: false
+      - label: "布局"
+        name: "layout"
+        widget: "hidden"
+        default: "post"
 
+      # ---------- 封面 ----------
+      - label: "封面图"
+        name: "cover"
+        widget: "image"
+        required: false
+        hint: "文章封面图片，建议尺寸 900x500"
+
+      # ---------- 摘要 ----------
+      - label: "文章描述"
+        name: "description"
+        widget: "text"
+        required: false
+        hint: "用于主页展示和 SEO，留空则自动截取正文前 200 字"
+
+      # ---------- 正文 ----------
+      - label: "正文"
+        name: "body"
+        widget: "markdown"
+        required: true
+
+      # ---------- 其他设置 ----------
+      - label: "顶部大图"
+        name: "top_img"
+        widget: "image"
+        required: false
+        hint: "文章页顶部大图，不设置则使用封面图或默认图"
+      - label: "关键词"
+        name: "keywords"
+        widget: "list"
+        required: false
+        hint: "SEO 关键词，多个关键词用逗号分隔"
+      - label: "分类"
+        name: "categories"
+        widget: "list"
+        required: false
+        hint: "文章分类，建议只设置一个主分类"
+      - label: "标签"
+        name: "tags"
+        widget: "list"
+        required: false
+        hint: "文章标签，可设置多个"
+      - label: "置顶"
+        name: "sticky"
+        widget: "boolean"
+        default: false
+        required: false
+        hint: "开启后文章将固定在首页顶部"
+      - label: "显示评论"
+        name: "comments"
+        widget: "boolean"
+        default: true
+        required: false
+      - label: "显示目录"
+        name: "toc"
+        widget: "boolean"
+        default: true
+        required: false
+        hint: "是否显示文章目录"
+      - label: "AI 摘要"
+        name: "ai"
+        widget: "boolean"
+        default: true
+        required: false
+        hint: "是否启用 AI 生成文章摘要"
+      - label: "访问密码"
+        name: "password"
+        widget: "string"
+        required: false
+        hint: "设置后访问文章需要输入密码"
+      - label: "加密提示"
+        name: "message"
+        widget: "string"
+        required: false
+        hint: "密码输入框的提示文字"
+
+  # ==================== 说说/闲言碎语 ====================
+  - name: "essays"
+    label: "说说管理"
+    label_singular: "说说"
+    icon: "fas fa-comment"
+    folder: "source/_data/essays"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    description: "管理说说/闲言碎语"
+    summary: "{{content | truncate(50)}} - {{date|date('YYYY-MM-DD')}}"
+    fields:
+      - label: "内容"
+        name: "content"
+        widget: "text"
+        required: true
+        hint: "说说内容"
+      - label: "发布日期"
+        name: "date"
+        widget: "datetime"
+        default: "{{now}}"
+        format: "YYYY-MM-DD HH:mm:ss"
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm:ss"
+        picker_utc: false
+      - label: "图片"
+        name: "image"
+        widget: "image"
+        required: false
+        hint: "可选配图"
+      - label: "链接"
+        name: "link"
+        widget: "string"
+        required: false
+        hint: "可选链接"
+      - label: "链接标题"
+        name: "link_title"
+        widget: "string"
+        required: false
+
+  # ==================== 友链管理 ====================
+  - name: "links"
+    label: "友链管理"
+    label_singular: "友链"
+    icon: "fas fa-link"
+    folder: "source/_data/links"
+    create: true
+    slug: "{{name}}"
+    description: "管理友情链接"
+    summary: "{{name}} - {{link}}"
+    sortable_fields:
+      - field: name
+    fields:
+      - label: "站点名称"
+        name: "name"
+        widget: "string"
+        required: true
+      - label: "站点链接"
+        name: "link"
+        widget: "string"
+        required: true
+      - label: "头像"
+        name: "avatar"
+        widget: "image"
+        required: true
+      - label: "描述"
+        name: "descr"
+        widget: "string"
+        required: false
+      - label: "排序"
+        name: "order"
+        widget: "number"
+        default: 0
+        required: false
+        hint: "数字越小越靠前"
+      - label: "标签"
+        name: "tag"
+        widget: "select"
+        options:
+          - "小伙伴"
+          - "推荐"
+          - "技术"
+          - "生活"
+        default: "小伙伴"
+        required: false
+
+  # ==================== 独立页面 ====================
   - name: "pages"
     label: "独立页面"
+    icon: "fas fa-file"
     files:
       - name: "about"
         label: "关于我"
         file: "source/about/index.md"
         fields:
-          - { label: "标题", name: "title", widget: "string" }
-          - { label: "内容", name: "body", widget: "markdown" }
+          - { label: "标题", name: "title", widget: "string", default: "关于我" }
+          - { label: "类型", name: "type", widget: "hidden", default: "about" }
+          - label: "评论"
+            name: "comments"
+            widget: "boolean"
+            default: true
+          - label: "内容"
+            name: "body"
+            widget: "markdown"
       - name: "friends"
         label: "友情链接"
         file: "source/friends/index.md"
         fields:
-          - { label: "标题", name: "title", widget: "string" }
-          - { label: "内容", name: "body", widget: "markdown" }
+          - { label: "标题", name: "title", widget: "string", default: "友情链接" }
+          - { label: "类型", name: "type", widget: "hidden", default: "link" }
+          - label: "评论"
+            name: "comments"
+            widget: "boolean"
+            default: true
+          - label: "内容"
+            name: "body"
+            widget: "markdown"
+            required: false
+            hint: "友链页面顶部说明文字"
 
+  # ==================== 站点设置 ====================
   - name: "config"
     label: "站点设置"
-    delete: false # 禁止删除配置文件
+    icon: "fas fa-cog"
+    delete: false
     editor:
-      preview: false # 配置文件不需要预览
+      preview: false
     files:
       - name: "site_config"
         label: "基础信息"
         file: "_config.yml"
         fields:
-          - { label: "站点标题", name: "title", widget: "string" }
-          - { label: "副标题", name: "subtitle", widget: "string" }
-          - { label: "站点描述", name: "description", widget: "text" }
-          - { label: "作者", name: "author", widget: "string" }
-          - { label: "站点语言", name: "language", widget: "string" }
-          - { label: "时区", name: "timezone", widget: "string" }
-          - { label: "站点 URL", name: "url", widget: "string" }
+          - label: "站点标题"
+            name: "title"
+            widget: "string"
+          - label: "副标题"
+            name: "subtitle"
+            widget: "string"
+          - label: "站点描述"
+            name: "description"
+            widget: "text"
+          - label: "作者"
+            name: "author"
+            widget: "string"
+          - label: "站点语言"
+            name: "language"
+            widget: "string"
+          - label: "时区"
+            name: "timezone"
+            widget: "string"
+          - label: "站点 URL"
+            name: "url"
+            widget: "string"
+
+      - name: "theme_config"
+        label: "主题设置"
+        file: "_config.anzhiyu.yml"
+        fields:
+          - label: "站点图标"
+            name: "favicon"
+            widget: "image"
+            required: false
+          - label: "头像"
+            name: "avatar"
+            widget: "object"
+            fields:
+              - label: "头像地址"
+                name: "img"
+                widget: "image"
+              - label: "头像特效"
+                name: "effect"
+                widget: "boolean"
+                default: false
+          - label: "社交链接"
+            name: "social"
+            widget: "list"
+            required: false
+            hint: "格式: 名称: 链接 || 图标"
+            field:
+              label: "社交信息"
+              name: "social_item"
+              widget: "string"

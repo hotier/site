@@ -3,19 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Content Manager</title>
+  <title>内容管理</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-  <!-- Include the script that builds the page and powers Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <!-- 引入官方汉化包 -->
-  <script src="https://unpkg.com/decap-cms-locales/dist/zh_Hans.js"></script>
   <script>
-    // 注册官方汉化包
-    CMS.registerLocale('zh_Hans', zh_Hans);
-    CMS.registerLocale('zh', zh_Hans);
-    CMS.registerLocale('zh-cn', zh_Hans);
+    // 使用官方汉化包
+    CMS.registerLocale('zh-Hans', zh_Hans);
+    
+    // 覆盖官方翻译中缺失的部分
+    CMS.registerPreviewStyle('/admin/preview.css');
   </script>
 </body>
 </html>
