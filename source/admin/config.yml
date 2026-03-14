@@ -6,7 +6,7 @@ backend:
   auth_endpoint: api/auth # 指向我们新增的 Vercel Serverless Function
 
 publish_mode: editorial_workflow # 启用编辑工作流
-locale: 'zh-Hans' # 设置界面语言为中文
+locale: 'zh_Hans' # 设置界面语言为官方汉化包的代码
 
 media_folder: source/images # 图片存储目录
 public_folder: /images # 发布后的图片路径
