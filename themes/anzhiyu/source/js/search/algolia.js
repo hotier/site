@@ -118,13 +118,13 @@ window.addEventListener("load", () => {
     container: "#algolia-hits",
     templates: {
       item(data) {
-        let rawLink = data.permalink ? data.permalink : GLOBAL_CONFIG.root + data.path;
-
-        // 修复跳转到 0.0.7.234 的问题：如果链接包含错误 IP，将其转为相对路径
-        if (rawLink.includes("0.0.7.234")) {
-          rawLink = rawLink.replace(/^https?:\/\/0\.0\.7\.234/, "");
-          if (!rawLink.startsWith("/")) rawLink = "/" + rawLink;
-        }
+        // 智能修复路径：去除 .html 后缀并确保以 / 结尾，以匹配 Hexo 的 permalink 格式
+        let rawPath = data.path || "";
+        rawPath = rawPath.replace(/\.html$/, ""); // 去除末尾的 .html
+        if (!rawPath.endsWith("/")) rawPath += "/"; // 补全末尾斜杠
+        if (!rawPath.startsWith("/")) rawPath = "/" + rawPath; // 确保以 / 开头
+        
+        let rawLink = rawPath;
 
         // 验证链接安全性，防止 javascript: 协议注入
         const link = /^(https?:\/\/|\/)/i.test(rawLink) ? escapeHtml(rawLink) : escapeHtml("/" + rawLink);
