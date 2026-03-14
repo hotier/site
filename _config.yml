@@ -101,12 +101,13 @@ ignore:
 theme: anzhiyu
 plugins:
   - hexo-algoliasearch
+# key数据,在vercel配置环境变量
 algolia:
-  appId: "LL9WT1LYBJ"
-  apiKey: "cc86d4703f9e6f3b49649530e97815fd"
-  adminApiKey: "bcee0e78acc9ed6d7d55982c55e558cc"
+  appId: ""
+  apiKey: ""
+  adminApiKey: ""
   chunkSize: 5000
-  indexName: "hexo"
+  indexName: ""
   fields:
     - content:strip:truncate,0,500
     - excerpt:strip
