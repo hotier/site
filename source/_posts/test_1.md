@@ -1,6 +1,7 @@
 ---
 title: 这是一条测试文章
 date: 2026-03-14T11:25:00.000+08:00
+cover: /images/DASHENG-900x700-2.png
 ---
 Hexo 实用博文合集
 
