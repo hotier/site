@@ -43,7 +43,7 @@ collections:
     create: true
     slug: "{{slug}}"
     description: "管理博客文章"
-    summary: "{{title}} - {{date|date('YYYY-MM-DD')}}"
+    summary: "{{title}} - {{year}}-{{month}}-{{day}}"
     sortable_fields:
       - date
       - title
