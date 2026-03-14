@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "hexo clean && hexo generate",
+    "sync": "git pull origin main --rebase",
+    "build": "npm run sync && hexo clean && hexo generate",
+    "push": "npm run sync && git add . && git commit -m \"Update site\" && git push origin main",
     "clean": "hexo clean",
-    "deploy": "hexo deploy",
     "server": "hexo server"
   },
   "engines": {

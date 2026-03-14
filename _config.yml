@@ -102,9 +102,10 @@ theme: anzhiyu
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
-deploy:
-  type: git
-  repo: https://github.com/hotier/site.git
-  branch: gh-pages  # 专门用于 Pages 部署的分支（避免和源码分支冲突）
-  message: "Deploy site: {{ now('YYYY-MM-DD HH:mm:ss') }}"
+## 本地不再使用 hexo deploy，已切换至 GitHub Actions 自动化部署
+# deploy:
+#   type: git
+#   repo: https://github.com/hotier/site.git
+#   branch: gh-pages
+#   message: "Deploy site: {{ now('YYYY-MM-DD HH:mm:ss') }}"
 
