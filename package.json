@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "hexo": "^8.0.0",
-    "hexo-admin-cn": "^2.1.0",
     "hexo-cli": "^4.3.1",
     "hexo-deployer-git": "^4.0.0",
     "hexo-generator-archive": "^2.0.0",
