@@ -1252,7 +1252,8 @@ inject:
 
   bottom:
     # Vercel Analytics
-    - <script defer src="/_vercel/insights/script.js"></script>
+    - <script src="/_vercel/insights/script.js" defer></script>
+    - <script>window.va = window.va || function() {(window.vaq = window.vaq || []).push(arguments)};</script>
 
 # CDN
 # Don't modify the following settings unless you know how they work
