@@ -2,7 +2,7 @@ backend:
   name: github
   repo: hotier/site # 您的 GitHub 仓库
   branch: main # 源代码分支
-  base_url: https://site-navy-beta.vercel.app # 统一使用 Vercel 域名
+  base_url: https://hotier.cc.cd # 统一使用 Vercel 域名
   auth_endpoint: api/auth # 指向我们新增的 Vercel Serverless Function
   commit_messages:
     create: "✨ 新建文章: {{slug}}"
@@ -15,8 +15,8 @@ publish_mode: editorial_workflow # 启用编辑工作流
 locale: 'zh_Hans' # 设置界面语言为简体中文
 
 # 站点链接配置
-site_url: https://site-navy-beta.vercel.app
-display_url: https://site-navy-beta.vercel.app
+site_url: https://hotier.cc.cd
+display_url: https://hotier.cc.cd
 
 # 自定义 Logo
 logo:
