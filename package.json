@@ -3,10 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "hexo generate",
+    "build": "hexo clean && hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "server": "hexo server"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "hexo": {
     "version": "8.1.1"
@@ -14,6 +17,7 @@
   "dependencies": {
     "hexo": "^8.0.0",
     "hexo-admin-cn": "^2.1.0",
+    "hexo-cli": "^4.3.1",
     "hexo-deployer-git": "^4.0.0",
     "hexo-generator-archive": "^2.0.0",
     "hexo-generator-category": "^2.0.0",
