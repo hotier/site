@@ -53,6 +53,7 @@
           longerLoading: '正在努力加载中',
           noEntries: '暂无内容',
           sortBy: '排序方式',
+          loadingEntry: '正在加载条目...',
         },
         defaultFields: {
           author: { label: '作者' },
@@ -125,14 +126,19 @@
           publish: '发布',
           publishing: '正在发布...',
           publishChanges: '发布修改',
+          unpublish: '取消发布',
+          unpublishing: '正在取消发布...',
+          duplicate: '复制',
           deleteEntry: '删除已发布的条目',
           deleteUnpublishedEntry: '删除未发布的条目',
           deleteUnpublishedChanges: '丢弃未发布的修改',
         },
         onSave: {
           title: '修改已保存',
+          unsavedChangesTitle: '有未保存的修改',
           saveStatus: {
             saved: '已保存',
+            unsaved: '未保存的修改',
             saving: '正在保存...',
             error: '保存失败',
           },
@@ -199,6 +205,8 @@
           inReviewHeader: '审核中',
           readyHeader: '待发布',
           currentEntries: '%{smart_count} 个条目',
+          readyToLive: '%{smart_count} 个待上线',
+          waitingForReview: '%{smart_count} 个待审核',
         },
       },
     };
