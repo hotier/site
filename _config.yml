@@ -112,11 +112,17 @@ algolia:
     - content:strip:truncate,0,500
     - excerpt:strip
     - gallery
-    - permalink
+    - permalink:strip
     - photos
     - slug
     - tags
     - title
+
+# APlayer
+# https://github.com/MoePlayer/hexo-tag-aplayer/blob/master/docs/README-zh_cn.md
+aplayer:
+  meting: true
+  asset_inject: false
 # 部署设置
 ## 文档: https://hexo.io/docs/one-command-deployment
 ## 本地不再使用 hexo deploy，已切换至 GitHub Actions 自动化部署

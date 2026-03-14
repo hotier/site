@@ -29,13 +29,13 @@ nav:
     - title: 网页
       item:
         - name: 博客
-          link: https://hexo.anheyu.com/
+          link: https://hotier.cc.cd/
           icon: /img/favicon.ico
     - title: 项目
       item:
-        - name: 安知鱼图床
-          link: https://image.anheyu.com/
-          icon: https://image.anheyu.com/favicon.ico
+        - name: 图床
+          link: https://img.hotier.cc.cd/
+          icon: https://img.hotier.cc.cd/favicon.ico
 
 # mourn （哀悼日，指定日期网站简单变灰，不包括滚动条）
 # 注意： 仅网站首页变灰，其他页面正常显示
@@ -155,7 +155,7 @@ disable_top_img: false
 index_img: false # "background: url() top / cover no-repeat"
 
 # 如果没有设置页面头图，将显示默认 top_img
-default_top_img: false
+default_top_img: /images/default_pic_2.png
 
 cover:
   # 是否显示封面
@@ -166,7 +166,7 @@ cover:
   # left/right/both
   position: left
   # 当没有设置封面时，显示的默认封面
-  default_cover:
+  default_cover: /images/default_pic_2.png
     # - /img/default_cover.jpg
 
 # Replace Broken Images (替换无法显示的图片)
@@ -238,7 +238,7 @@ post_copyright:
   enable: true
   decode: false
   author_href:
-  location: 长沙
+  location: 武汉
   license: CC BY-NC-SA 4.0
   license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
   avatarSinks: false # hover时头像下沉
@@ -250,10 +250,10 @@ post_copyright:
 reward:
   enable: true
   QR_code:
-    - img: https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png
+    - img: https://api.hotier.cc.cd/d3168450.webp
       link:
       text: 微信
-    - img: https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png
+    - img: https://api.hotier.cc.cd/f91a7f26.webp
       link:
       text: 支付宝
 
@@ -318,12 +318,12 @@ addtoany:
 comments:
   # 最多支持两个评论系统，第一个将作为默认显示
   # 选择: Valine/Waline/Twikoo/Artalk
-  use: # Twikoo/Waline
+  use: Twikoo
   text: true # 在按钮旁边显示评论名称
   # lazyload: 评论系统将在评论元素进入浏览器视口时加载。
   # 如果设置为 true，评论计数将失效
   lazyload: false
-  count: false # 在文章的 top_img 中显示评论计数
+  count: true # 在文章的 top_img 中显示评论计数
   card_post_count: false # 在首页卡片中显示评论计数
 
 # valine
@@ -364,9 +364,9 @@ waline:
 # Twikoo
 # https://github.com/imaegoo/twikoo
 twikoo:
-  envId:
-  region:
-  visitor: false
+  envId: https://twikoo.hotier.cc.cd/
+  region: ap-shanghai
+  visitor: true
   option:
 
 # Artalk
@@ -451,15 +451,15 @@ footer:
       - link: https://hexo.anheyu.com/
         shields: https://npm.elemecdn.com/anzhiyu-theme-static@1.0.9/img/Theme-AnZhiYu-2E67D3.svg
         message: 本站使用AnZhiYu主题
-      # - link: https://www.dogecloud.com/
-      #   shields: https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/CDN-多吉云-3693F3.svg
-      #   message: 本站使用多吉云为静态资源提供CDN加速
-      # - link: https://github.com/
-      #   shields: https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Source-Github.svg
-      #   message: 本站项目由Github托管
-      # - link: http://creativecommons.org/licenses/by-nc-sa/4.0/
-      #   shields: https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/Copyright-BY-NC-SA.svg
-      #   message: 本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可
+      - link: https://www.dogecloud.com/
+        shields: https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/CDN-多吉云-3693F3.svg
+        message: 本站使用多吉云为静态资源提供CDN加速
+      - link: https://github.com/
+        shields: https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Source-Github.svg
+        message: 本站项目由Github托管
+      - link: http://creativecommons.org/licenses/by-nc-sa/4.0/
+        shields: https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/Copyright-BY-NC-SA.svg
+        message: 本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可
   socialBar:
     enable: false
     centerImg:
@@ -534,8 +534,8 @@ footer:
     linkList:
       - link: https://github.com/anzhiyu-c/hexo-theme-anzhiyu
         text: 主题
-      # - link: https://image.anheyu.com
-      #   text: 图床
+      - link: https://img.hotier.cc.cd/
+        text: 图床
       # - link: https://beian.miit.gov.cn/
       #   text: 湘ICP备-xxxxxxx号
     subTitle:
@@ -1086,11 +1086,11 @@ home_top:
 
 # 朋友圈配置
 friends_vue:
-  enable: false
+  enable: true
   vue_js: https://npm.elemecdn.com/anzhiyu-theme-static@1.1.1/friends/index.4f887d95.js
-  apiurl: # 朋友圈后端地址
+  apiurl: https://friends.hotier.cc.cd/
   top_tips: 使用 友链朋友圈 订阅友链最新文章
-  top_background:
+  top_background: https://img02.anheyu.com/adminuploads/1/2022/08/21/630249e2df20f.jpg
 
 # 深色模式粒子效果canvas
 universe:

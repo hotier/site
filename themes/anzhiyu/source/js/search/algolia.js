@@ -118,11 +118,11 @@ window.addEventListener("load", () => {
     container: "#algolia-hits",
     templates: {
       item(data) {
-        // 智能修复路径：去除 .html 后缀并确保以 / 结尾，以匹配 Hexo 的 permalink 格式
+        // 智能修复路径：处理 index.html，并确保符合 Hexo 的 permalink 格式
         let rawPath = data.path || "";
-        rawPath = rawPath.replace(/\.html$/, ""); // 去除末尾的 .html
-        if (!rawPath.endsWith("/")) rawPath += "/"; // 补全末尾斜杠
-        if (!rawPath.startsWith("/")) rawPath = "/" + rawPath; // 确保以 / 开头
+        rawPath = "/" + rawPath.replace(/\/index\.html$/, "/").replace(/\.html$/, "/");
+        // 确保路径不出现双斜杠
+        rawPath = rawPath.replace(/\/+/g, "/");
         
         let rawLink = rawPath;
 
