@@ -8,7 +8,7 @@ subtitle: ''
 description: ''
 keywords:
 author: John Doe
-language: en
+language: zh-CN
 timezone: ''
 
 # URL
@@ -101,4 +101,16 @@ theme: anzhiyu
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: git
+  repo: https://github.com/hotier/site.git
+  branch: gh-pages  # 专门用于 Pages 部署的分支（避免和源码分支冲突）
+  message: "Deploy site: {{ now('YYYY-MM-DD HH:mm:ss') }}"
+
+# Hexo Admin
+admin:
+  username: hotier
+  password_hash: # 如果需要密码，请在这里填写加密后的哈希值
+  secret: hexo_admin_secret
+  deployCommand: 'npx hexo clean && npx hexo generate && npx hexo deploy'
+  language: zh-CN
+
