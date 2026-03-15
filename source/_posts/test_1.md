@@ -1,9 +1,15 @@
 ---
 title: 测试文章 1
 date: 2026-03-10 14:00:00
+updated: ''
 layout: post
-categories: [测试]
-tags: [测试, 示例]
+cover: /images/DASHENG-900x700-1.png
+description: ''
+categories:
+  - 测试
+tags:
+  - 测试
+  - 示例
 ---
 
 # 测试文章 1
@@ -20,6 +26,6 @@ tags: [测试, 示例]
 console.log('Hello, World!');
 ```
 
----
+***
 
 这是测试文章的内容。
