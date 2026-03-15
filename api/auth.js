@@ -1,23 +1,21 @@
-// Vercel Serverless Function for GitHub OAuth authentication
-// Compatible with Sveltia CMS Authenticator protocol
+// Sveltia CMS Authenticator for Vercel
+// Based on https://github.com/sveltia/sveltia-cms-auth
 
 export default async function handler(request) {
   const { searchParams, method } = request;
   const url = new URL(request.url);
   
-  // Get environment variables
   const clientId = process.env.GITHUB_CLIENT_ID;
   const clientSecret = process.env.GITHUB_CLIENT_SECRET;
   const allowedDomains = process.env.ALLOWED_DOMAINS?.split(',').map(d => d.trim()) || [];
   
   if (!clientId || !clientSecret) {
     return new Response(
-      JSON.stringify({ error: 'Server configuration error: Missing GitHub OAuth credentials' }),
+      JSON.stringify({ error: 'Missing GitHub OAuth credentials' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
 
-  // Handle CORS
   const origin = request.headers.get('origin');
   const corsHeaders = {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -43,10 +41,11 @@ export default async function handler(request) {
     return new Response(null, { status: 200, headers: corsHeaders });
   }
 
-  // Auth endpoint - redirect to GitHub OAuth
   const code = searchParams.get('code');
+  const provider = searchParams.get('provider') || 'github';
+  const siteId = searchParams.get('site_id') || '';
+
   if (method === 'GET' && !code) {
-    const provider = searchParams.get('provider') || 'github';
     const protocol = url.protocol;
     const host = url.host;
     const redirectUri = `${protocol}//${host}/api/callback`;
@@ -55,19 +54,17 @@ export default async function handler(request) {
     githubAuthUrl.searchParams.set('client_id', clientId);
     githubAuthUrl.searchParams.set('redirect_uri', redirectUri);
     githubAuthUrl.searchParams.set('scope', 'repo user');
-    githubAuthUrl.searchParams.set('state', searchParams.get('site_id') || '');
+    githubAuthUrl.searchParams.set('state', siteId);
     
     return Response.redirect(githubAuthUrl.toString(), 302);
   }
 
-  // Callback handling - exchange code for access token
   if (method === 'GET' && code) {
     try {
       const protocol = url.protocol;
       const host = url.host;
       const redirectUri = `${protocol}//${host}/api/callback`;
       
-      // Exchange code for access token
       const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
         method: 'POST',
         headers: {
@@ -88,7 +85,6 @@ export default async function handler(request) {
         throw new Error(tokenData.error_description || tokenData.error);
       }
 
-      // Get user info
       const userResponse = await fetch('https://api.github.com/user', {
         headers: {
           'Authorization': `token ${tokenData.access_token}`,
@@ -98,7 +94,6 @@ export default async function handler(request) {
 
       const userData = await userResponse.json();
 
-      // Return success response for Sveltia CMS
       const html = `<!DOCTYPE html>
 <html>
 <head>
