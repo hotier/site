@@ -4,7 +4,7 @@ backend:
   name: github
   repo: hotier/site
   branch: main
-  base_url: https://auth.hotier.cc.cd
+  base_url: https://auth-cms.hotier.cc.cd
 
 # 站点链接配置
 site_url: https://hotier.cc.cd
