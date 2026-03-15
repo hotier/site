@@ -18,15 +18,13 @@ export default async function handler(req, res) {
       });
     }
 
-    // Get the host from headers or use default
-    const host = req.headers.host || 'hotier.cc.cd';
-    const protocol = req.headers['x-forwarded-proto'] || 'https';
-    const origin = `${protocol}://${host}`;
+    // Hardcode the exact redirect URI to match GitHub OAuth App configuration
+    // This must match exactly what's in your GitHub OAuth App settings
+    const redirectUri = 'https://hotier.cc.cd/auth';
+    const origin = 'https://hotier.cc.cd';
     
     // Step 1: Redirect to GitHub OAuth if no code
     if (!code) {
-      const redirectUri = `${origin}/auth`;
-      
       const params = new URLSearchParams({
         client_id: clientId,
         redirect_uri: redirectUri,
@@ -38,8 +36,6 @@ export default async function handler(req, res) {
     }
 
     // Step 2: Exchange code for access token
-    const redirectUri = `${origin}/auth`;
-    
     // Exchange code for token
     const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
       method: 'POST',
