@@ -142,28 +142,41 @@ export default async function handler(req, res) {
           }
         };
         
-        // Send to specific origin for security
-        window.opener.postMessage(message, '${origin}');
-        
-        // Also try with wildcard as fallback (some CMS versions expect this)
-        window.opener.postMessage(message, '*');
-        
-        statusEl.textContent = 'Success!';
-        statusEl.className = 'success';
-        messageEl.textContent = 'Authentication completed. You can close this window.';
-        
-        // Close window after a short delay
-        setTimeout(function() {
-          window.close();
-        }, 1500);
+        try {
+          // 尝试多次发送，确保消息送达
+          window.opener.postMessage(message, '${origin}');
+          window.opener.postMessage(message, '*');
+          
+          // 延迟后再次发送
+          setTimeout(() => {
+            window.opener.postMessage(message, '${origin}');
+            window.opener.postMessage(message, '*');
+          }, 100);
+          
+          // 再次延迟发送，确保可靠性
+          setTimeout(() => {
+            window.opener.postMessage(message, '${origin}');
+            window.opener.postMessage(message, '*');
+          }, 200);
+          
+          statusEl.textContent = 'Success!';
+          statusEl.className = 'success';
+          messageEl.textContent = 'Authentication completed. You can close this window.';
+          
+          // 延迟关闭窗口，确保消息有足够时间发送
+          setTimeout(() => {
+            window.close();
+          }, 1500);
+        } catch (error) {
+          console.error('postMessage error:', error);
+          statusEl.textContent = 'Error';
+          statusEl.className = 'error';
+          messageEl.textContent = 'Failed to send authentication result. Please close this window and try again.';
+        }
       }
       
-      // Send message when page loads
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', sendMessage);
-      } else {
-        sendMessage();
-      }
+      // 立即发送消息
+      sendMessage();
     })();
   </script>
 </body>
