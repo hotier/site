@@ -192,32 +192,32 @@ export default async function handler(req, res) {
           
           try {
             // 尝试多次发送，确保消息送达
-            logDebug('Sending message ' + index + ' to: ${origin}');
-            window.opener.postMessage(message, '${origin}');
+            logDebug('Sending message ' + index + ' to: ' + origin);
+            window.opener.postMessage(message, origin);
             
             logDebug('Sending message ' + index + ' to: *');
             window.opener.postMessage(message, '*');
             
             // 延迟后再次发送
             setTimeout(() => {
-              logDebug('Sending message ' + index + ' again after 100ms to: ${origin}');
-              window.opener.postMessage(message, '${origin}');
+              logDebug('Sending message ' + index + ' again after 100ms to: ' + origin);
+              window.opener.postMessage(message, origin);
               logDebug('Sending message ' + index + ' again after 100ms to: *');
               window.opener.postMessage(message, '*');
             }, 100);
             
             // 再次延迟发送，确保可靠性
             setTimeout(() => {
-              logDebug('Sending message ' + index + ' again after 200ms to: ${origin}');
-              window.opener.postMessage(message, '${origin}');
+              logDebug('Sending message ' + index + ' again after 200ms to: ' + origin);
+              window.opener.postMessage(message, origin);
               logDebug('Sending message ' + index + ' again after 200ms to: *');
               window.opener.postMessage(message, '*');
             }, 200);
             
             // 增加额外的发送尝试
             setTimeout(() => {
-              logDebug('Sending message ' + index + ' again after 500ms to: ${origin}');
-              window.opener.postMessage(message, '${origin}');
+              logDebug('Sending message ' + index + ' again after 500ms to: ' + origin);
+              window.opener.postMessage(message, origin);
               logDebug('Sending message ' + index + ' again after 500ms to: *');
               window.opener.postMessage(message, '*');
             }, 500);
