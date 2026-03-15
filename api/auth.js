@@ -48,7 +48,7 @@ export default async function handler(request) {
   if (method === 'GET' && !code) {
     const protocol = url.protocol;
     const host = url.host;
-    const redirectUri = `${protocol}//${host}/api/callback`;
+    const redirectUri = `${protocol}//${host}/api/auth`;
     
     const githubAuthUrl = new URL('https://github.com/login/oauth/authorize');
     githubAuthUrl.searchParams.set('client_id', clientId);
@@ -63,7 +63,7 @@ export default async function handler(request) {
     try {
       const protocol = url.protocol;
       const host = url.host;
-      const redirectUri = `${protocol}//${host}/api/callback`;
+      const redirectUri = `${protocol}//${host}/api/auth`;
       
       const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
         method: 'POST',
