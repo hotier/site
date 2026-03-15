@@ -31,7 +31,9 @@ export default async function handler(req, res) {
         client_id: clientId,
         redirect_uri: redirectUri,
         scope: 'repo,user',
-        state: state
+        state: state,
+        // Add timestamp to prevent caching
+        timestamp: Date.now().toString()
       });
       
       // Set strong cache control headers for redirect
@@ -86,6 +88,9 @@ export default async function handler(req, res) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Authenticating...</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -177,6 +182,9 @@ export default async function handler(req, res) {
 <head>
   <meta charset="utf-8">
   <title>Authentication Error</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -231,10 +239,13 @@ export default async function handler(req, res) {
 
 // Helper function to set strong no-cache headers
 function setNoCacheHeaders(res) {
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0, proxy-revalidate');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
   // Add CDN-specific headers
   res.setHeader('Surrogate-Control', 'no-store');
-  res.setHeader('Vary', 'Accept-Encoding');
+  res.setHeader('Vary', '*');
+  // Add additional security headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
 }
