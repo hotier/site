@@ -13,6 +13,8 @@ export default async function handler(req, res) {
     const clientSecret = process.env.GITHUB_CLIENT_SECRET;
     
     if (!clientId || !clientSecret) {
+      // Set strong cache control headers
+      setNoCacheHeaders(res);
       return res.status(500).json({
         error: 'Server configuration error: Missing OAuth credentials'
       });
@@ -32,6 +34,8 @@ export default async function handler(req, res) {
         state: state
       });
       
+      // Set strong cache control headers for redirect
+      setNoCacheHeaders(res);
       return res.redirect(302, `https://github.com/login/oauth/authorize?${params.toString()}`);
     }
 
@@ -160,8 +164,9 @@ export default async function handler(req, res) {
 </body>
 </html>`;
 
+    // Set strong cache control headers
+    setNoCacheHeaders(res);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     return res.status(200).send(html);
 
   } catch (error) {
@@ -217,7 +222,19 @@ export default async function handler(req, res) {
 </body>
 </html>`;
 
+    // Set strong cache control headers
+    setNoCacheHeaders(res);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     return res.status(400).send(errorHtml);
   }
+}
+
+// Helper function to set strong no-cache headers
+function setNoCacheHeaders(res) {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  // Add CDN-specific headers
+  res.setHeader('Surrogate-Control', 'no-store');
+  res.setHeader('Vary', 'Accept-Encoding');
 }
