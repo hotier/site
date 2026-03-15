@@ -1,0 +1,226 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+backend:
+  name: github
+  repo: hotier/site
+  branch: main
+  auth_type: implicit
+  app_id: 'YOUR_GITHUB_APP_ID'
+  client_id: 'YOUR_GITHUB_CLIENT_ID'
+
+# 站点链接配置
+site_url: https://hotier.cc.cd
+display_url: https://hotier.cc.cd
+
+media_folder: source/images
+public_folder: /images
+
+collections:
+  # ==================== 文章管理 ====================
+  - name: "posts"
+    label: "文章管理"
+    label_singular: "文章"
+    icon: "article"
+    folder: "source/_posts"
+    create: true
+    slug: "{{timestamp}}"
+    description: "管理博客文章"
+    summary: "{{title}}"
+    sortable_fields:
+      - date
+      - title
+      - categories
+    view_filters:
+      - label: "置顶文章"
+        field: sticky
+        pattern: true
+      - label: "加密文章"
+        field: password
+        pattern: ".+"
+      - label: "隐藏评论"
+        field: comments
+        pattern: false
+    view_groups:
+      - label: "按年份"
+        field: date
+        pattern: \d{4}
+      - label: "按分类"
+        field: categories
+    fields:
+      # ---------- 隐藏字段 (用于生成文件名) ----------
+      - {label: "Unix 时间戳", name: "timestamp", widget: "hidden", default: ""}
+      
+      # ---------- 基础信息 ----------
+      - label: "标题"
+        name: "title"
+        widget: "string"
+        required: true
+      - label: "发布日期"
+        name: "date"
+        widget: "datetime"
+        default: "{{now}}"
+        format: "YYYY-MM-DD HH:mm:ss"
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm:ss"
+        picker_utc: false
+      - label: "更新日期"
+        name: "updated"
+        widget: "datetime"
+        required: false
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm:ss"
+        picker_utc: false
+      - label: "布局"
+        name: "layout"
+        widget: "hidden"
+        default: "post"
+
+      # ---------- 封面 ----------
+      - label: "封面图"
+        name: "cover"
+        widget: "image"
+        required: false
+        hint: "文章封面图片，建议尺寸 900x500"
+
+      # ---------- 摘要 ----------
+      - label: "文章描述"
+        name: "description"
+        widget: "text"
+        required: false
+        hint: "用于主页展示和 SEO，留空则自动截取正文前 200 字"
+
+      # ---------- 正文 ----------
+      - label: "正文"
+        name: "body"
+        widget: "markdown"
+        required: true
+
+      # ---------- 其他设置 ----------
+      - label: "顶部大图"
+        name: "top_img"
+        widget: "image"
+        required: false
+        hint: "文章页顶部大图，不设置则使用封面图或默认图"
+      - label: "关键词"
+        name: "keywords"
+        widget: "list"
+        required: false
+        hint: "SEO 关键词，多个关键词用逗号分隔"
+      - label: "分类"
+        name: "categories"
+        widget: "list"
+        required: false
+        hint: "文章分类，建议只设置一个主分类"
+      - label: "标签"
+        name: "tags"
+        widget: "list"
+        required: false
+        hint: "文章标签，可设置多个"
+      - label: "置顶"
+        name: "sticky"
+        widget: "boolean"
+        default: false
+        required: false
+        hint: "开启后文章将固定在首页顶部"
+      - label: "显示评论"
+        name: "comments"
+        widget: "boolean"
+        default: true
+        required: false
+      - label: "显示目录"
+        name: "toc"
+        widget: "boolean"
+        default: true
+        required: false
+        hint: "是否显示文章目录"
+      - label: "AI 摘要"
+        name: "ai"
+        widget: "boolean"
+        default: true
+        required: false
+        hint: "是否启用 AI 生成文章摘要"
+      - label: "访问密码"
+        name: "password"
+        widget: "string"
+        required: false
+        hint: "设置后访问文章需要输入密码"
+      - label: "加密提示"
+        name: "message"
+        widget: "string"
+        required: false
+        hint: "密码输入框的提示文字"
+
+  # ==================== 说说/闲言碎语 ====================
+  - name: "essays"
+    label: "说说管理"
+    label_singular: "说说"
+    icon: "chat"
+    folder: "source/_data/essays"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    description: "管理说说/闲言碎语"
+    summary: "{{content | truncate(50)}} - {{date|date('YYYY-MM-DD')}}"
+    fields:
+      - label: "内容"
+        name: "content"
+        widget: "text"
+        required: true
+        hint: "说说内容"
+      - label: "发布日期"
+        name: "date"
+        widget: "datetime"
+        default: "{{now}}"
+        format: "YYYY-MM-DD HH:mm:ss"
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm:ss"
+        picker_utc: false
+      - label: "图片"
+        name: "image"
+        widget: "image"
+        required: false
+        hint: "可选配图"
+      - label: "链接"
+        name: "link"
+        widget: "string"
+        required: false
+        hint: "可选链接"
+      - label: "链接标题"
+        name: "link_title"
+        widget: "string"
+        required: false
+
+  # ==================== 友链管理 ====================
+  - name: "links"
+    label: "友链管理"
+    label_singular: "友链"
+    icon: "link"
+    folder: "source/_data/links"
+    create: true
+    slug: "{{name}}"
+    description: "管理友情链接"
+    summary: "{{name}} - {{link}}"
+    sortable_fields:
+      - field: name
+      - field: link
+    fields:
+      - label: "名称"
+        name: "name"
+        widget: "string"
+        required: true
+      - label: "链接"
+        name: "link"
+        widget: "string"
+        required: true
+      - label: "头像"
+        name: "avatar"
+        widget: "image"
+        required: false
+      - label: "描述"
+        name: "descr"
+        widget: "string"
+        required: false
+      - label: "分类"
+        name: "sites"
+        widget: "string"
+        required: false
+        default: "小伙伴"

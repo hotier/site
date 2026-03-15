@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Sveltia CMS - 内容管理</title>
+</head>
+<body>
+  <!-- Sveltia CMS: 现代、极速、颜值高的 Git-based CMS -->
+  <!-- rocket-loader disabled -->
+  <script data-cfasync="false" src="/admin/js/sveltia-cms.js"></script>
+  <script>
+    /**
+     * 强力实时汉化脚本 (DOM 级覆盖)
+     * 针对 Sveltia CMS 内置汉化不全的问题，通过监控 DOM 变化实时替换按钮文本
+     */
+    const i18nDict = {
+      'Collections': '集合',
+      'Sort': '排序',
+      'Filter': '筛选',
+      'Group': '分组',
+      'New': '新建',
+      'Delete': '删除',
+      'None': '无',
+      'Oldest': '最早',
+      'Newest': '最新',
+      'Search for entries...': '搜索内容...',
+      'Workflow': '工作流',
+      'Media': '媒体库',
+      'Settings': '设置',
+      'Log out': '退出登录',
+      'Draft': '草稿',
+      'In Review': '审核中',
+      'Ready': '就绪',
+      'All': '全部',
+      'Entries': '条目',
+      'Save': '保存',
+      'Publish': '发布',
+      'Cancel': '取消',
+      'old to new': '最早',
+      'new to old': '最新',
+      'A to Z': 'A-Z',
+      'Z to A': 'Z-A',
+      'Updated by': '更新者',
+      'Assets': '媒体文件',
+      'Upload': '上传',
+      'Download': '下载',
+      'Preview': '预览',
+      'Copy': '复制',
+      'Type': '类型',
+      'Size': '大小',
+      'Global Assets': '公共资源',
+      'All Assets': '全部资源',
+      'Name': '名称',
+      'Updated on': '更新日期',
+      'Image': '图片',
+      'Video': '视频',
+      'Audio': '音频',
+      'Document': '文档',
+      'Other': '其他',
+      'Global': '公共',
+      'Your Site': '你的站点',
+      'Kind': '种类',
+      'Dimensions': '尺寸',
+      'Public URL': '公开链接',
+      'File Path': '文件路径',
+      'Used in': '引用位置',
+      'Select an asset to show the info.': '选择一个资源以查看详细信息。',
+      'Search for assets...': '搜索资源...',
+      'File Data': '文件数据',
+      'PNG image': 'PNG 图片',
+      'JPEG image': 'JPEG 图片',
+      'WebP image': 'WebP 图片',
+      'GIF image': 'GIF 图片',
+      'SVG image': 'SVG 图片',
+      'Asset URL has been copied to clipboard.': '资源链接已复制到剪贴板',
+      'This collection has no entries yet.': '此集合暂无条目。',
+      'Create New Entry': '新建条目',
+      'Create 新建 Entry': '新建条目',
+      'Edit': '编辑',
+      'Rename': '重命名',
+      'Replace': '替换',
+      'View on Live Site': '在站点中查看',
+      'Asset file path has been copied to clipboard.': '资源文件路径已复制到剪贴板',
+      'Asset file has been copied to clipboard.': '资源文件已复制到剪贴板',
+      'Restore': '恢复',
+      'Discard': '放弃',
+      'This entry has a backup from': '此条目有备份于',
+      'Do you want to restore the edited draft?': '是否恢复编辑的草稿？',
+      'Duplicate': '复制',
+      'Now': '当前时间',
+      'Clear': '清除',
+      'Revert Changes': '撤销更改',
+      'Edit Slug': '编辑 URL',
+      'Slug': 'URL',
+      'Revert': '撤销',
+      'Revert All Changes': '撤销全部更改',
+      'Show': '显示',
+      'Sync Scrolling': '同步滚动',
+      'Update': '更新',
+      'Changing the slug may break internal and external links to the entry. Currently, Sveltia CMS does not update references created with Relation fields, so you’ll need to manually update such references along with other links.': '更改 URL 可能会破坏指向条目的内部和外部链接。目前，Sveltia CMS 不会更新通过关联字段创建的引用，因此您需要手动更新这些引用以及其他链接。',
+      'Remove': '移除',
+      'Drop an image file here or click to browse…': '拖放图片文件到此处或点击浏览…',
+      'Entry has been duplicated. It\'s now a new draft.': '条目已复制。现在是一个新的草稿。',
+      'Loading Site Data…': '正在加载站点数据…',
+      'Sign In…': '登录…',
+      'Signing in…': '登录中…',
+      'Signed In as': '已登录为',
+      'Live Site': '站点首页',
+      'Keyboard Shortcuts': '键盘快捷键',
+      'Sign Out': '退出登录',
+      'View Content Library': '查看内容库',
+      'View Asset Library': '查看资源库',
+      'Search for entries and assets': '搜索条目和资源',
+      'Create a new entry': '创建新条目',
+      'Save an entry': '保存条目',
+      'Cancel entry editing': '取消条目编辑',
+      'Appearance': '外观',
+      'Theme': '主题',
+      'Auto': '自动',
+      'Dark': '深色',
+      'Light': '浅色',
+      'Language': '语言',
+      'Contents': '内容',
+      'Accessibility': '无障碍',
+      'Advanced': '高级',
+      'User Interface Language': '用户界面语言',
+      'Editor': '编辑器',
+      'Automatically back up entry drafts': '自动备份条目草稿',
+      'Close the editor after saving a draft': '保存草稿后关闭编辑器',
+      'Close the editor with the Escape key': '使用 Escape 键关闭编辑器',
+      'Cloud Storage Service API Keys': '云存储服务 API 密钥',
+      'No cloud storage services are configured.': '未配置云存储服务。',
+      'Stock Photo Service API Keys': '图库服务 API 密钥',
+      'Manage API keys for stock photo services.': '管理图库服务的 API 密钥。',
+      'stock photo services': '图库服务',
+      'Manage API keys for cloud storage services': '管理云存储服务的 API 密钥',
+      'Work with Local Repository': '使用本地仓库',
+      'Once prompted, select the root directory of the': '出现提示后，选择这个根目录：',
+      'repository.': '仓库。',
+      'A repository root directory could not be selected. Please try again.': '无法选择仓库根目录。请重试。',
+      'Sign In Using Personal Access Token': '使用个人访问令牌登录',
+      'Enter your token below. It must have read/write access to the repository content.': '在下方输入您的令牌。它必须具有对仓库内容的读写权限。',
+      'You can generate a token on the GitHub user settings page.': '您可以在 GitHub 用户设置页面生成令牌。',
+      'GitHub user settings page': 'GitHub 用户设置页面',
+      'Sign In with GitHub': '使用 GitHub 登录',
+      'Sign In with GitHub Using Token': '使用 Token 登录 GitHub',
+      'Underline Links': '链接下划线',
+      'Show underline for links in the entry preview and user interface labels.': '在条目预览和用户界面标签中为链接显示下划线。',
+      'Always Underline Links': '始终显示链接下划线',
+      'Beta Features': '测试功能',
+      'Enable some beta features that may be unstable or unlocalized.': '启用一些可能不稳定或未本地化的测试功能。',
+      'Join Beta Program': '加入测试计划',
+      'Developer Mode': '开发者模式',
+      'Enable some developer-oriented features, including detailed console logs and native context menus.': '启用一些面向开发者的功能，包括详细的控制台日志和原生上下文菜单。',
+      'Enable Developer Mode': '启用开发者模式'
+    };
+
+
+
+    const translateDOM = () => {
+      // 按键长度降序排序，确保更长的匹配项先被替换（如 'Edit Slug' 优先于 'Edit'）
+      const sortedKeys = Object.keys(i18nDict).sort((a, b) => b.length - a.length);
+      
+      // 深度遍历所有包含文本的元素
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+      let node;
+      while (walker.nextNode()) {
+        node = walker.currentNode;
+        const text = node.textContent;
+        
+        // 尝试精确匹配或部分替换
+        sortedKeys.forEach(key => {
+          if (text.includes(key)) {
+            node.textContent = node.textContent.replaceAll(key, i18nDict[key]);
+          }
+        });
+      }
+      
+      // 针对输入框占位符的特殊处理
+      document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(input => {
+        if (i18nDict[input.placeholder]) {
+          input.placeholder = i18nDict[input.placeholder];
+        }
+      });
+      
+      // 处理可能使用 data-placeholder 或 aria-placeholder 的元素
+      document.querySelectorAll('[data-placeholder], [aria-placeholder]').forEach(el => {
+        const placeholder = el.getAttribute('data-placeholder') || el.getAttribute('aria-placeholder');
+        if (placeholder && i18nDict[placeholder]) {
+          el.setAttribute(el.hasAttribute('data-placeholder') ? 'data-placeholder' : 'aria-placeholder', i18nDict[placeholder]);
+        }
+      });
+    };
+
+    // 使用 MutationObserver 持续监控界面变化 (因为 Sveltia 是动态渲染的)
+    let isTranslating = false;
+    const observer = new MutationObserver((mutations) => {
+      // 防止递归调用导致的性能问题
+      if (isTranslating) return;
+      isTranslating = true;
+      
+      // 使用 requestAnimationFrame 确保在下一帧执行，避免阻塞渲染
+      requestAnimationFrame(() => {
+        translateDOM();
+        isTranslating = false;
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+
+    // 初始执行一次
+    window.addEventListener('DOMContentLoaded', translateDOM);
+
+    // 保持文件名生成逻辑的兼容性
+    window.addEventListener('cms:preSave', ({ detail: { entry } }) => {
+      const data = entry.get('data');
+      const collection = entry.get('collection');
+      
+      // 只有在新建文章（没有 path）且没有时间戳时，自动生成 10 位 Unix 时间戳
+      if (collection === 'posts' && !data.get('timestamp') && !entry.get('path')) {
+        entry.setIn(['data', 'timestamp'], Math.floor(Date.now() / 1000).toString());
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+# Hexo 配置
+## 文档: https://hexo.io/docs/configuration.html
+## 源码: https://github.com/hexojs/hexo/
+
+# 网站设置
+title: Hotier
+subtitle: 'hotierの秘密基地'
+description: '欢迎来到我的博客'
+keywords:
+author: hotier
+language: zh-CN
+timezone: Asia/Shanghai
+
+# 网址设置
+## 在此处设置您的网站网址。例如，如果您使用 GitHub Pages，请将 url 设置为 'https://username.github.io/project'
+url: https://hotier.cc.cd/
+root: /
+permalink: :year/:month/:day/:title/
+permalink_defaults:
+pretty_urls:
+  trailing_index: true # 设置为 false 以从永久链接中移除末尾的 'index.html'
+  trailing_html: true # 设置为 false 以从永久链接中移除末尾的 '.html'
+
+# 目录设置
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+  - "admin/**"
+
+# 写作设置
+new_post_name: :title.md # 新文章的文件名
+default_layout: post
+titlecase: false # 将标题转换为首字母大写
+external_link:
+  enable: true # 在新标签页中打开外部链接
+  field: site # 应用于整个网站
+  exclude: ''
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+syntax_highlighter: highlight.js
+highlight:
+  line_number: true
+  auto_detect: false
+  tab_replace: ''
+  wrap: true
+  hljs: false
+prismjs:
+  preprocess: true
+  line_number: true
+  tab_replace: ''
+
+# 首页设置
+# path: 博客首页的根路径。(默认 = '')
+# per_page: 每页显示的文章数。(0 = 禁用分页)
+# order_by: 文章排序。(默认按日期降序)
+index_generator:
+  path: ''
+  per_page: 10
+  order_by: -date
+
+# 分类与标签
+default_category: uncategorized
+category_map:
+tag_map:
+
+# 元数据元素
+## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
+meta_generator: true
+
+# 日期/时间格式
+## Hexo 使用 Moment.js 来解析和显示日期
+## 您可以按照以下链接中定义的格式自定义日期格式
+## http://momentjs.com/docs/#/displaying/format/
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+## updated_option 支持 'mtime'、'date'、'empty'
+updated_option: 'mtime'
+
+# 分页设置
+## 将 per_page 设置为 0 以禁用分页
+per_page: 10
+pagination_dir: page
+
+# 包含/排除文件
+## include:/exclude: 选项仅适用于 'source/' 文件夹
+include:
+exclude:
+ignore:
+
+# 扩展设置
+## 插件: https://hexo.io/plugins/
+## 主题: https://hexo.io/themes/
+theme: anzhiyu
+plugins:
+  - hexo-algoliasearch
+# key数据,在vercel配置环境变量
+algolia:
+  appId: "LL9WT1LYBJ"
+  apiKey: "cc86d4703f9e6f3b49649530e97815fd"
+  adminApiKey: "144f8b76307819f786b0a658d18b1cbd"
+  chunkSize: 5000
+  indexName: "hexo_pages"
+  fields:
+    - content:strip:truncate,0,500
+    - excerpt:strip
+    - gallery
+    - permalink:strip
+    - photos
+    - slug
+    - tags
+    - title
+
+# APlayer
+# https://github.com/MoePlayer/hexo-tag-aplayer/blob/master/docs/README-zh_cn.md
+aplayer:
+  meting: true
+  asset_inject: false
+# 部署设置
+## 文档: https://hexo.io/docs/one-command-deployment
+## 本地不再使用 hexo deploy，已切换至 GitHub Actions 自动化部署
+# deploy:
+#   type: git
+#   repo: https://github.com/hotier/site.git
+#   branch: gh-pages
+#   message: "Deploy site: {{ now('YYYY-MM-DD HH:mm:ss') }}"
+

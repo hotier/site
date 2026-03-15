@@ -1,0 +1,37 @@
+{
+  "name": "hexo-site",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "hexo clean && hexo generate",
+    "clean": "hexo clean",
+    "server": "hexo server",
+    "update-cms": "bash update-cms.sh",
+    "update-cms-win": "powershell -ExecutionPolicy Bypass -File update-cms.ps1"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "hexo": {
+    "version": "8.1.1"
+  },
+  "dependencies": {
+    "@sveltia/cms": "^0.146.6",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
+    "hexo": "^8.0.0",
+    "hexo-algoliasearch": "^2.0.1",
+    "hexo-cli": "^4.3.1",
+    "hexo-generator-archive": "^2.0.0",
+    "hexo-generator-category": "^2.0.0",
+    "hexo-generator-index": "^4.0.0",
+    "hexo-generator-tag": "^2.0.0",
+    "hexo-renderer-ejs": "^2.0.0",
+    "hexo-renderer-marked": "^7.0.0",
+    "hexo-renderer-pug": "^3.0.0",
+    "hexo-renderer-stylus": "^3.0.1",
+    "hexo-server": "^3.0.0",
+    "hexo-theme-landscape": "^1.0.0",
+    "hexo-wordcount": "^6.0.1"
+  }
+}
