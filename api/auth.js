@@ -154,67 +154,88 @@ export default async function handler(req, res) {
         
         logDebug('Window opener exists: ' + window.opener.location.href);
         
-        const message = {
-          type: 'authorization:github:success',
-          provider: 'github',
-          token: '${accessToken}',
-          user: {
-            login: '${userData.login}',
-            name: '${userData.name || userData.login}',
-            email: '${userData.email || ''}'
+        // 尝试多种消息格式，确保兼容不同版本的 Sveltia CMS
+        const messages = [
+          // 标准格式
+          {
+            type: 'authorization:github:success',
+            provider: 'github',
+            token: '${accessToken}',
+            user: {
+              login: '${userData.login}',
+              name: '${userData.name || userData.login}',
+              email: '${userData.email || ''}'
+            }
+          },
+          // 简化格式
+          {
+            type: 'auth:success',
+            provider: 'github',
+            token: '${accessToken}',
+            user: {
+              login: '${userData.login}',
+              name: '${userData.name || userData.login}',
+              email: '${userData.email || ''}'
+            }
+          },
+          // 最小格式
+          {
+            token: '${accessToken}',
+            user: {
+              login: '${userData.login}'
+            }
           }
-        };
+        ];
         
-        logDebug('Message to send: ' + JSON.stringify(message));
+        messages.forEach((message, index) => {
+          logDebug('Message ' + index + ' to send: ' + JSON.stringify(message));
+          
+          try {
+            // 尝试多次发送，确保消息送达
+            logDebug('Sending message ' + index + ' to: ${origin}');
+            window.opener.postMessage(message, '${origin}');
+            
+            logDebug('Sending message ' + index + ' to: *');
+            window.opener.postMessage(message, '*');
+            
+            // 延迟后再次发送
+            setTimeout(() => {
+              logDebug('Sending message ' + index + ' again after 100ms to: ${origin}');
+              window.opener.postMessage(message, '${origin}');
+              logDebug('Sending message ' + index + ' again after 100ms to: *');
+              window.opener.postMessage(message, '*');
+            }, 100);
+            
+            // 再次延迟发送，确保可靠性
+            setTimeout(() => {
+              logDebug('Sending message ' + index + ' again after 200ms to: ${origin}');
+              window.opener.postMessage(message, '${origin}');
+              logDebug('Sending message ' + index + ' again after 200ms to: *');
+              window.opener.postMessage(message, '*');
+            }, 200);
+            
+            // 增加额外的发送尝试
+            setTimeout(() => {
+              logDebug('Sending message ' + index + ' again after 500ms to: ${origin}');
+              window.opener.postMessage(message, '${origin}');
+              logDebug('Sending message ' + index + ' again after 500ms to: *');
+              window.opener.postMessage(message, '*');
+            }, 500);
+          } catch (error) {
+            logDebug('Error sending message ' + index + ': ' + error.message);
+          }
+        });
         
-        try {
-          // 尝试多次发送，确保消息送达
-          logDebug('Sending message to: ${origin}');
-          window.opener.postMessage(message, '${origin}');
-          
-          logDebug('Sending message to: *');
-          window.opener.postMessage(message, '*');
-          
-          // 延迟后再次发送
-          setTimeout(() => {
-            logDebug('Sending message again after 100ms to: ${origin}');
-            window.opener.postMessage(message, '${origin}');
-            logDebug('Sending message again after 100ms to: *');
-            window.opener.postMessage(message, '*');
-          }, 100);
-          
-          // 再次延迟发送，确保可靠性
-          setTimeout(() => {
-            logDebug('Sending message again after 200ms to: ${origin}');
-            window.opener.postMessage(message, '${origin}');
-            logDebug('Sending message again after 200ms to: *');
-            window.opener.postMessage(message, '*');
-          }, 200);
-          
-          // 增加额外的发送尝试
-          setTimeout(() => {
-            logDebug('Sending message again after 500ms to: ${origin}');
-            window.opener.postMessage(message, '${origin}');
-            logDebug('Sending message again after 500ms to: *');
-            window.opener.postMessage(message, '*');
-          }, 500);
-          
-          statusEl.textContent = 'Success!';
-          statusEl.className = 'success';
-          messageEl.textContent = 'Authentication completed. You can close this window.';
-          logDebug('Authentication successful, messages sent');
-          
-          // 延迟关闭窗口，确保消息有足够时间发送
-          setTimeout(() => {
-            logDebug('Closing window after 3000ms');
-            window.close();
-          }, 3000);
-        } catch (error) {
-          logDebug('postMessage error: ' + error.message);
-          statusEl.textContent = 'Error';
-          statusEl.className = 'error';
-          messageEl.textContent = 'Failed to send authentication result. Please close this window and try again.';
-        }
+        statusEl.textContent = 'Success!';
+        statusEl.className = 'success';
+        messageEl.textContent = 'Authentication completed. You can close this window.';
+        logDebug('Authentication successful, messages sent');
+        
+        // 延迟关闭窗口，确保消息有足够时间发送
+        setTimeout(() => {
+          logDebug('Closing window after 3000ms');
+          window.close();
+        }, 3000);
       }
       
       // 立即发送消息
