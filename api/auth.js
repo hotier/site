@@ -160,29 +160,29 @@ export default async function handler(req, res) {
           {
             type: 'authorization:github:success',
             provider: 'github',
-            token: '${accessToken}',
+            token: accessToken,
             user: {
-              login: '${userData.login}',
-              name: '${userData.name || userData.login}',
-              email: '${userData.email || ''}'
+              login: userData.login,
+              name: userData.name || userData.login,
+              email: userData.email || ''
             }
           },
           // 简化格式
           {
             type: 'auth:success',
             provider: 'github',
-            token: '${accessToken}',
+            token: accessToken,
             user: {
-              login: '${userData.login}',
-              name: '${userData.name || userData.login}',
-              email: '${userData.email || ''}'
+              login: userData.login,
+              name: userData.name || userData.login,
+              email: userData.email || ''
             }
           },
           // 最小格式
           {
-            token: '${accessToken}',
+            token: accessToken,
             user: {
-              login: '${userData.login}'
+              login: userData.login
             }
           }
         ];
