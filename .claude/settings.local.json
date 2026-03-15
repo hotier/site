@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add api/auth.js)",
+      "Bash(git commit:*)"
+    ]
+  }
+}

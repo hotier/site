@@ -4,7 +4,7 @@ backend:
   name: github
   repo: hotier/site
   branch: main
-  base_url: https://hotier.cc.cd
+  base_url: https://sveltia-cms-auth.lht1976277790.workers.dev
 
 # 站点链接配置
 site_url: https://hotier.cc.cd
