@@ -45,10 +45,14 @@ export default async function handler(request) {
     'Access-Control-Allow-Headers': 'Content-Type',
   };
   
-  if (origin && allowedDomains.length > 0) {
+  // 默认允许 hotier.cc.cd 域名
+  const defaultAllowedDomains = ['hotier.cc.cd', 'www.hotier.cc.cd'];
+  const allAllowedDomains = [...defaultAllowedDomains, ...allowedDomains];
+  
+  if (origin) {
     try {
       const hostname = new URL(origin).hostname;
-      const isAllowed = allowedDomains.some(domain => {
+      const isAllowed = allAllowedDomains.some(domain => {
         if (domain.startsWith('*.')) {
           const suffix = domain.slice(2);
           return hostname.endsWith(suffix);
@@ -58,6 +62,7 @@ export default async function handler(request) {
       
       if (isAllowed) {
         corsHeaders['Access-Control-Allow-Origin'] = origin;
+        corsHeaders['Access-Control-Allow-Credentials'] = 'true';
       }
     } catch (error) {
       console.error('Origin parsing error:', error);
@@ -87,7 +92,7 @@ export default async function handler(request) {
       }
     }
     
-    const redirectUri = `${protocol}://${host}/api/auth`;
+    const redirectUri = `${protocol}://${host}/auth`;
     
     const githubAuthUrl = new URL('https://github.com/login/oauth/authorize');
     githubAuthUrl.searchParams.set('client_id', clientId);
@@ -114,7 +119,7 @@ export default async function handler(request) {
         }
       }
       
-      const redirectUri = `${protocol}://${host}/api/auth`;
+      const redirectUri = `${protocol}://${host}/auth`;
       
       const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
         method: 'POST',
@@ -150,17 +155,29 @@ export default async function handler(request) {
 <head>
   <title>Authentication Successful</title>
   <script>
-    window.opener.postMessage({
-      type: 'authorization:github:success',
-      provider: 'github',
-      token: '${tokenData.access_token}',
-      user: {
-        login: '${userData.login}',
-        name: '${userData.name || userData.login}',
-        email: '${userData.email || ''}',
+    (function() {
+      const targetOrigin = '${protocol}://${host}';
+      const message = {
+        type: 'authorization:github:success',
+        provider: 'github',
+        token: '${tokenData.access_token}',
+        user: {
+          login: '${userData.login}',
+          name: '${userData.name || userData.login}',
+          email: '${userData.email || ''}',
+        }
+      };
+      
+      if (window.opener) {
+        window.opener.postMessage(message, targetOrigin);
+        // 延迟关闭窗口，确保消息已发送
+        setTimeout(function() {
+          window.close();
+        }, 100);
+      } else {
+        document.body.innerHTML = '<h1>Authentication Error</h1><p>Cannot communicate with the parent window. Please close this window and try again.</p>';
       }
-    }, '*');
-    window.close();
+    })();
   </script>
 </head>
 <body>
