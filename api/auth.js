@@ -23,17 +23,21 @@ export default async function handler(request) {
   };
   
   if (origin && allowedDomains.length > 0) {
-    const hostname = new URL(origin).hostname;
-    const isAllowed = allowedDomains.some(domain => {
-      if (domain.startsWith('*.')) {
-        const suffix = domain.slice(2);
-        return hostname.endsWith(suffix);
+    try {
+      const hostname = new URL(origin).hostname;
+      const isAllowed = allowedDomains.some(domain => {
+        if (domain.startsWith('*.')) {
+          const suffix = domain.slice(2);
+          return hostname.endsWith(suffix);
+        }
+        return hostname === domain;
+      });
+      
+      if (isAllowed) {
+        corsHeaders['Access-Control-Allow-Origin'] = origin;
       }
-      return hostname === domain;
-    });
-    
-    if (isAllowed) {
-      corsHeaders['Access-Control-Allow-Origin'] = origin;
+    } catch (error) {
+      console.error('Origin parsing error:', error);
     }
   }
 
