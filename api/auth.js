@@ -1,49 +1,43 @@
 // Sveltia CMS GitHub OAuth Provider for Vercel
 // Compatible with sveltia-cms-auth style implementation
 
-export default async function handler(request, context) {
-  const url = new URL(request.url);
-  const code = url.searchParams.get('code');
-  const state = url.searchParams.get('state') || '';
-  
-  // Get environment variables
-  const clientId = process.env.GITHUB_CLIENT_ID;
-  const clientSecret = process.env.GITHUB_CLIENT_SECRET;
-  
-  if (!clientId || !clientSecret) {
-    return new Response(
-      JSON.stringify({ error: 'Server configuration error: Missing OAuth credentials' }),
-      { 
-        status: 500, 
-        headers: { 
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        } 
-      }
-    );
-  }
-
-  // Get the host from headers or use default
-  const host = request.headers.get('host') || 'hotier.cc.cd';
-  const protocol = request.headers.get('x-forwarded-proto') || 'https';
-  const origin = `${protocol}://${host}`;
-  
-  // Step 1: Redirect to GitHub OAuth if no code
-  if (!code) {
-    const redirectUri = `${origin}/auth`;
-    
-    const params = new URLSearchParams({
-      client_id: clientId,
-      redirect_uri: redirectUri,
-      scope: 'repo,user',
-      state: state
-    });
-    
-    return Response.redirect(`https://github.com/login/oauth/authorize?${params.toString()}`, 302);
-  }
-
-  // Step 2: Exchange code for access token
+// Vercel Serverless Function style
+export default async function handler(req, res) {
   try {
+    const url = new URL(`https://${req.headers.host}${req.url}`);
+    const code = url.searchParams.get('code');
+    const state = url.searchParams.get('state') || '';
+    
+    // Get environment variables
+    const clientId = process.env.GITHUB_CLIENT_ID;
+    const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+    
+    if (!clientId || !clientSecret) {
+      return res.status(500).json({
+        error: 'Server configuration error: Missing OAuth credentials'
+      });
+    }
+
+    // Get the host from headers or use default
+    const host = req.headers.host || 'hotier.cc.cd';
+    const protocol = req.headers['x-forwarded-proto'] || 'https';
+    const origin = `${protocol}://${host}`;
+    
+    // Step 1: Redirect to GitHub OAuth if no code
+    if (!code) {
+      const redirectUri = `${origin}/auth`;
+      
+      const params = new URLSearchParams({
+        client_id: clientId,
+        redirect_uri: redirectUri,
+        scope: 'repo,user',
+        state: state
+      });
+      
+      return res.redirect(302, `https://github.com/login/oauth/authorize?${params.toString()}`);
+    }
+
+    // Step 2: Exchange code for access token
     const redirectUri = `${origin}/auth`;
     
     // Exchange code for token
@@ -170,13 +164,9 @@ export default async function handler(request, context) {
 </body>
 </html>`;
 
-    return new Response(html, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'no-cache, no-store, must-revalidate'
-      }
-    });
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    return res.status(200).send(html);
 
   } catch (error) {
     console.error('OAuth Error:', error);
@@ -231,11 +221,7 @@ export default async function handler(request, context) {
 </body>
 </html>`;
 
-    return new Response(errorHtml, {
-      status: 400,
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8'
-      }
-    });
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    return res.status(400).send(errorHtml);
   }
 }
