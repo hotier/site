@@ -1,22 +1,27 @@
-// Vercel API Route for GitHub OAuth callback
+// Vercel Serverless Function for GitHub OAuth callback
 // This handles the OAuth callback from GitHub
 
-export default async function handler(req, res) {
-  const { query } = req;
+export default async function handler(request) {
+  const { searchParams } = request;
+  const url = new URL(request.url);
   
   // Redirect to auth handler with the code
-  if (query.code) {
-    const protocol = req.headers['x-forwarded-proto'] || 'https';
-    const host = req.headers.host;
-    const redirectUrl = new URL(`${protocol}://${host}/api/auth`);
+  const code = searchParams.get('code');
+  if (code) {
+    const protocol = url.protocol;
+    const host = url.host;
+    const redirectUrl = new URL(`${protocol}//${host}/api/auth`);
     
     // Pass all query parameters
-    Object.keys(query).forEach(key => {
-      redirectUrl.searchParams.set(key, query[key]);
+    searchParams.forEach((value, key) => {
+      redirectUrl.searchParams.set(key, value);
     });
     
-    return res.redirect(redirectUrl.toString());
+    return Response.redirect(redirectUrl.toString(), 302);
   }
 
-  return res.status(400).json({ error: 'Missing authorization code' });
+  return new Response(
+    JSON.stringify({ error: 'Missing authorization code' }),
+    { status: 400, headers: { 'Content-Type': 'application/json' } }
+  );
 }

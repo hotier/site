@@ -1,8 +1,9 @@
-// Vercel API Route for GitHub OAuth authentication
+// Vercel Serverless Function for GitHub OAuth authentication
 // Compatible with Sveltia CMS Authenticator protocol
 
-export default async function handler(req, res) {
-  const { method, query, body } = req;
+export default async function handler(request) {
+  const { searchParams, method } = request;
+  const url = new URL(request.url);
   
   // Get environment variables
   const clientId = process.env.GITHUB_CLIENT_ID;
@@ -10,13 +11,19 @@ export default async function handler(req, res) {
   const allowedDomains = process.env.ALLOWED_DOMAINS?.split(',').map(d => d.trim()) || [];
   
   if (!clientId || !clientSecret) {
-    return res.status(500).json({ 
-      error: 'Server configuration error: Missing GitHub OAuth credentials' 
-    });
+    return new Response(
+      JSON.stringify({ error: 'Server configuration error: Missing GitHub OAuth credentials' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 
   // Handle CORS
-  const origin = req.headers.origin;
+  const origin = request.headers.get('origin');
+  const corsHeaders = {
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+  
   if (origin && allowedDomains.length > 0) {
     const hostname = new URL(origin).hostname;
     const isAllowed = allowedDomains.some(domain => {
@@ -28,34 +35,37 @@ export default async function handler(req, res) {
     });
     
     if (isAllowed) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      corsHeaders['Access-Control-Allow-Origin'] = origin;
     }
   }
 
   if (method === 'OPTIONS') {
-    return res.status(200).end();
+    return new Response(null, { status: 200, headers: corsHeaders });
   }
 
   // Auth endpoint - redirect to GitHub OAuth
-  if (method === 'GET' && !query.code) {
-    const provider = query.provider || 'github';
-    const redirectUri = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}/api/auth/callback`;
+  const code = searchParams.get('code');
+  if (method === 'GET' && !code) {
+    const provider = searchParams.get('provider') || 'github';
+    const protocol = url.protocol;
+    const host = url.host;
+    const redirectUri = `${protocol}//${host}/api/callback`;
     
     const githubAuthUrl = new URL('https://github.com/login/oauth/authorize');
     githubAuthUrl.searchParams.set('client_id', clientId);
     githubAuthUrl.searchParams.set('redirect_uri', redirectUri);
     githubAuthUrl.searchParams.set('scope', 'repo user');
-    githubAuthUrl.searchParams.set('state', query.site_id || '');
+    githubAuthUrl.searchParams.set('state', searchParams.get('site_id') || '');
     
-    return res.redirect(githubAuthUrl.toString());
+    return Response.redirect(githubAuthUrl.toString(), 302);
   }
 
-  // Callback endpoint - handle GitHub OAuth callback
-  if (method === 'GET' && query.code) {
+  // Callback handling - exchange code for access token
+  if (method === 'GET' && code) {
     try {
-      const redirectUri = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}/api/auth/callback`;
+      const protocol = url.protocol;
+      const host = url.host;
+      const redirectUri = `${protocol}//${host}/api/callback`;
       
       // Exchange code for access token
       const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
@@ -67,7 +77,7 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           client_id: clientId,
           client_secret: clientSecret,
-          code: query.code,
+          code: code,
           redirect_uri: redirectUri,
         }),
       });
@@ -89,8 +99,7 @@ export default async function handler(req, res) {
       const userData = await userResponse.json();
 
       // Return success response for Sveltia CMS
-      const html = `
-<!DOCTYPE html>
+      const html = `<!DOCTYPE html>
 <html>
 <head>
   <title>Authentication Successful</title>
@@ -114,17 +123,25 @@ export default async function handler(req, res) {
 </body>
 </html>`;
 
-      res.setHeader('Content-Type', 'text/html');
-      return res.status(200).send(html);
+      return new Response(html, {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/html',
+          ...corsHeaders,
+        },
+      });
 
     } catch (error) {
       console.error('OAuth error:', error);
-      return res.status(500).json({ 
-        error: 'Authentication failed',
-        message: error.message 
-      });
+      return new Response(
+        JSON.stringify({ error: 'Authentication failed', message: error.message }),
+        { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+      );
     }
   }
 
-  return res.status(405).json({ error: 'Method not allowed' });
+  return new Response(
+    JSON.stringify({ error: 'Method not allowed' }),
+    { status: 405, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+  );
 }
