@@ -3,7 +3,15 @@
 
 export default async function handler(request) {
   const { searchParams, method } = request;
-  const url = new URL(request.url);
+  
+  // Get the full URL from request
+  let url;
+  try {
+    url = new URL(request.url);
+  } catch (error) {
+    // In Vercel development server, request.url is just the path
+    url = new URL(`http://localhost:3000${request.url}`);
+  }
   
   const clientId = process.env.GITHUB_CLIENT_ID;
   const clientSecret = process.env.GITHUB_CLIENT_SECRET;
@@ -50,9 +58,9 @@ export default async function handler(request) {
   const siteId = searchParams.get('site_id') || '';
 
   if (method === 'GET' && !code) {
-    const protocol = url.protocol;
-    const host = url.host;
-    const redirectUri = `${protocol}//${host}/api/auth`;
+    const protocol = request.headers.get('x-forwarded-proto') || 'https';
+    const host = request.headers.get('host') || 'hotier.cc.cd';
+    const redirectUri = `${protocol}://${host}/api/auth`;
     
     const githubAuthUrl = new URL('https://github.com/login/oauth/authorize');
     githubAuthUrl.searchParams.set('client_id', clientId);
@@ -65,9 +73,9 @@ export default async function handler(request) {
 
   if (method === 'GET' && code) {
     try {
-      const protocol = url.protocol;
-      const host = url.host;
-      const redirectUri = `${protocol}//${host}/api/auth`;
+      const protocol = request.headers.get('x-forwarded-proto') || 'https';
+      const host = request.headers.get('host') || 'hotier.cc.cd';
+      const redirectUri = `${protocol}://${host}/api/auth`;
       
       const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
         method: 'POST',
