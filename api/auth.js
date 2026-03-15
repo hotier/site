@@ -2,16 +2,22 @@
 // Based on https://github.com/sveltia/sveltia-cms-auth
 
 export default async function handler(request) {
-  const { searchParams, method } = request;
-  
-  // Get the full URL from request
+  // Get URL and search params
   let url;
+  let searchParams;
+  
   try {
+    // For production Vercel environment
     url = new URL(request.url);
+    searchParams = url.searchParams;
   } catch (error) {
-    // In Vercel development server, request.url is just the path
-    url = new URL(`http://localhost:3000${request.url}`);
+    // For local development
+    const fullUrl = `http://localhost:3000${request.url}`;
+    url = new URL(fullUrl);
+    searchParams = url.searchParams;
   }
+  
+  const method = request.method || 'GET';
   
   const clientId = process.env.GITHUB_CLIENT_ID;
   const clientSecret = process.env.GITHUB_CLIENT_SECRET;
@@ -24,7 +30,16 @@ export default async function handler(request) {
     );
   }
 
-  const origin = request.headers.get('origin');
+  // Get origin from headers
+  let origin;
+  if (request.headers) {
+    if (typeof request.headers.get === 'function') {
+      origin = request.headers.get('origin');
+    } else {
+      origin = request.headers.origin;
+    }
+  }
+  
   const corsHeaders = {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
@@ -58,8 +73,20 @@ export default async function handler(request) {
   const siteId = searchParams.get('site_id') || '';
 
   if (method === 'GET' && !code) {
-    const protocol = request.headers.get('x-forwarded-proto') || 'https';
-    const host = request.headers.get('host') || 'hotier.cc.cd';
+    // Get protocol and host
+    let protocol = 'https';
+    let host = 'hotier.cc.cd';
+    
+    if (request.headers) {
+      if (typeof request.headers.get === 'function') {
+        protocol = request.headers.get('x-forwarded-proto') || protocol;
+        host = request.headers.get('host') || host;
+      } else {
+        protocol = request.headers['x-forwarded-proto'] || protocol;
+        host = request.headers.host || host;
+      }
+    }
+    
     const redirectUri = `${protocol}://${host}/api/auth`;
     
     const githubAuthUrl = new URL('https://github.com/login/oauth/authorize');
@@ -73,8 +100,20 @@ export default async function handler(request) {
 
   if (method === 'GET' && code) {
     try {
-      const protocol = request.headers.get('x-forwarded-proto') || 'https';
-      const host = request.headers.get('host') || 'hotier.cc.cd';
+      // Get protocol and host
+      let protocol = 'https';
+      let host = 'hotier.cc.cd';
+      
+      if (request.headers) {
+        if (typeof request.headers.get === 'function') {
+          protocol = request.headers.get('x-forwarded-proto') || protocol;
+          host = request.headers.get('host') || host;
+        } else {
+          protocol = request.headers['x-forwarded-proto'] || protocol;
+          host = request.headers.host || host;
+        }
+      }
+      
       const redirectUri = `${protocol}://${host}/api/auth`;
       
       const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
