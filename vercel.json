@@ -2,10 +2,6 @@
   "version": 2,
   "routes": [
     {
-      "src": "/auth",
-      "dest": "/api/auth"
-    },
-    {
       "src": "/api/(.*)",
       "dest": "/api/$1"
     },
