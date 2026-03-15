@@ -4,8 +4,6 @@ backend:
   name: github
   repo: hotier/site
   branch: main
-  auth_type: pkce
-  client_id: 'YOUR_GITHUB_CLIENT_ID'
 
 # 站点链接配置
 site_url: https://hotier.cc.cd
