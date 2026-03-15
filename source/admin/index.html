@@ -11,6 +11,18 @@
   <!-- rocket-loader disabled -->
   <script data-cfasync="false" src="/admin/js/sveltia-cms.js"></script>
   <script>
+    // 配置GitHub认证，从环境变量中读取配置
+    window.CMS_CONFIG = {
+      backend: {
+        name: 'github',
+        repo: 'hotier/site',
+        branch: 'main',
+        auth_type: 'pkce',
+        client_id: process.env.GITHUB_CLIENT_ID || 'YOUR_GITHUB_CLIENT_ID'
+      }
+    };
+  </script>
+  <script>
     /**
      * 强力实时汉化脚本 (DOM 级覆盖)
      * 针对 Sveltia CMS 内置汉化不全的问题，通过监控 DOM 变化实时替换按钮文本
