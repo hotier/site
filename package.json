@@ -16,7 +16,7 @@
     "version": "8.1.1"
   },
   "dependencies": {
-    "@sveltia/cms": "^0.146.6",
+    "@sveltia/cms": "^0.151.4",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "hexo": "^8.0.0",
